@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskSwift.Views.AddTaskPage">
+    <Grid BackgroundColor="#121212">
+        <StackLayout VerticalOptions="Center">
+            <Label Text="Title"
+                   TextColor="White"
+                   FontSize="30"
+                   Margin="20,0,20,0"></Label>
+            <Entry TextColor="White"
+                   PlaceholderColor="#444444"
+                   Margin="20,0,20,0"
+                   Placeholder="math test"
+                   x:Name="Title"
+                   TextChanged="CheckEntry"></Entry>
+            <FlexLayout Margin="20,0,20,0">
+                <CheckBox IsChecked="True"
+                          CheckedChanged="DeadlineCheckbox_CheckedChanged" 
+                          x:Name="DeadlineCheckbox"></CheckBox>
+                <Label Text="Set deadline."
+                       TextColor="White"
+                       VerticalTextAlignment="Center"></Label>
+            </FlexLayout>
+            <DatePicker TextColor="White"
+                        Margin="20,0,20,0"
+                        x:Name="TaskDate"></DatePicker>
+            <FlexLayout Margin="20,0,20,0">
+                <CheckBox CheckedChanged="TimeCheckbox_CheckedChanged"
+                          x:Name="TimeCheckbox"
+                          IsChecked="False"></CheckBox>
+                <Label Text="Time."
+                       TextColor="White"
+                       VerticalTextAlignment="Center"></Label>
+            </FlexLayout>
+            <TimePicker TextColor="White"
+                        Margin="20,0,20,0"
+                        x:Name="TaskTime"
+                        Unfocused="TaskTime_Unfocused"></TimePicker>
+            <Button Text="Submit"
+                    BackgroundColor="#4D4D4D"
+                    TextColor="White"
+                    Margin="20,10,20,0"
+                    FontSize="22"
+                    Clicked="AddTaskButton"
+                    x:Name="Submit"
+                    IsEnabled="False"></Button>
+        </StackLayout>
+    </Grid>
+</ContentPage>

@@ -4,11 +4,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TaskSwift"
-    Shell.FlyoutBehavior="Disabled">
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    xmlns:views="clr-namespace:TaskSwift.Views">
+    <TabBar>
+        <Tab Title="Home">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"></ShellContent>
+        </Tab>
+        <Tab Title="Profile">
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage"></ShellContent>
+        </Tab>
+        <Tab Title="Add">
+            <ShellContent ContentTemplate="{DataTemplate views:AddTaskPage}" Route="AddTaskPage"></ShellContent>
+        </Tab>
+    </TabBar>
 </Shell>
