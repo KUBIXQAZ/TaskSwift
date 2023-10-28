@@ -5,14 +5,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TaskSwift"
     xmlns:views="clr-namespace:TaskSwift.Views">
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Color x:Key="TabBarColor">#1c1c1c</Color>
+            <Style TargetType="TabBar">
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource TabBarColor}"/>
+                <Setter Property="Shell.TabBarTitleColor" Value="white" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="gray" />
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
     <TabBar>
-        <Tab Title="Home">
+        <Tab Title="Home" Icon="house_door.svg">
             <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"></ShellContent>
         </Tab>
-        <Tab Title="Profile">
+        <Tab Title="Profile" Icon="person.svg">
             <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage"></ShellContent>
         </Tab>
-        <Tab Title="Add">
+        <Tab Title="Add" Icon="plus_square.svg">
             <ShellContent ContentTemplate="{DataTemplate views:AddTaskPage}" Route="AddTaskPage"></ShellContent>
         </Tab>
     </TabBar>

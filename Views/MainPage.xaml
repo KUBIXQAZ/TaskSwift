@@ -9,10 +9,11 @@
                    CornerRadius="15"
                    Margin="8,3,8,0"
                    BorderColor="Transparent"
-                   HeightRequest="50"
+                   HeightRequest="80"
                    Padding="0">
                 <AbsoluteLayout>
                     <Label Text="polski" FontSize="20" Margin="40,10,0,0"/>
+                    <Label Text="2 Days Left" FontSize="20" Margin="40,40,0,0"/>
                     <Button BackgroundColor="Transparent" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" />
                     <RadioButton Margin="6,5,0,0"/>
                 </AbsoluteLayout>

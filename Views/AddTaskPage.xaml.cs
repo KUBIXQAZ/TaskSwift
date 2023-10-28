@@ -1,3 +1,4 @@
+using Microsoft.Maui;
 using Microsoft.Maui.Layouts;
 using Newtonsoft.Json;
 
@@ -13,118 +14,94 @@ public partial class AddTaskPage : ContentPage
         TaskTime.Time = DateTime.Now.TimeOfDay;
     }
 
-    public Frame GenerateTask(string title, DateTime date, bool noDeadline, bool display, Task taskJson)
+    public Frame GenerateTask(string title, DateTime date, bool noDeadline, bool display, Task task)
     {
-        if (display == true)
+        string daysLeft = Date.GetDaysLeft(date);
+        Color color = Colors.White;
+        Color bgColor = Color.FromRgb(77, 77, 77);
+        Color titleColor = Colors.White;
+
+        if (!display) task = Data.createTask(title, date, noDeadline);
+
+        int heightRequest;
+        if (!noDeadline)
         {
-            Frame frame = new Frame
+            heightRequest = 78;
+            if (daysLeft == "Overdue.")
             {
-                BackgroundColor = Color.FromHex("#4D4D4D"),
-                CornerRadius = 15,
-                BorderColor = Colors.Transparent,
-                Margin = new Thickness(8, 3, 8, 0),
-                HeightRequest = 50,
-                Padding = 0
-            };
-            
-            AbsoluteLayout absoluteLayout = new AbsoluteLayout();
-
-            RadioButton radioButton = new RadioButton
-            {
-                Margin = new Thickness(6, 5, 0, 0)
-            };
-            radioButton.CheckedChanged += (sender, e) =>
-            {
-                destroy(this, frame, taskJson);
-            };
-            
-            Button button = new Button
-            {
-                BackgroundColor = Colors.Transparent,
-            };
-            AbsoluteLayout.SetLayoutBounds(button, new Rect(0, 0, 1, 1));
-            AbsoluteLayout.SetLayoutFlags(button, AbsoluteLayoutFlags.All);
-            button.Clicked += (sender, e) =>
-            {
-                ViewTask();
-            };
-
-            string daysLeft = Date.GetDaysLeft(date);
-
-            string labelText;
-            if (noDeadline == true) labelText = title;
-            else labelText = title + " " + daysLeft;
-            
-            Label label = new Label
-            {
-                Margin = new Thickness(40, 10, 0, 0),
-                Text = labelText,
-                TextColor = Colors.White,
-                FontSize = 20
-            };
-            
-            frame.Content = absoluteLayout;
-
-            absoluteLayout.Children.Add(label);
-            absoluteLayout.Children.Add(button);
-            absoluteLayout.Children.Add(radioButton);
-            
-            return frame;
+                color = Color.FromRgb(163, 15, 15);
+                titleColor = Color.FromRgb(179, 179, 179);
+                bgColor = Color.FromRgb(64, 54, 54);
+            }
         }
-        else
+        else heightRequest = 50;
+
+        Frame frame = new Frame
         {
-            Task task = Data.createTask(title, date, noDeadline);
+            BackgroundColor = bgColor,
+            CornerRadius = 15,
+            BorderColor = Colors.Transparent,
+            Margin = new Thickness(8, 3, 8, 0),
+            HeightRequest = heightRequest,
+            Padding = 0
+        };
 
-            Frame frame = new Frame
+        AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+
+        RadioButton radioButton = new RadioButton
+        {
+            Margin = new Thickness(6, 5, 0, 0)
+        };
+        radioButton.CheckedChanged += (sender, e) =>
+        {
+            destroy(this, frame, task);
+        };
+
+        Button button = new Button
+        {
+            BackgroundColor = Colors.Transparent,
+        };
+        AbsoluteLayout.SetLayoutBounds(button, new Rect(0, 0, 1, 1));
+        AbsoluteLayout.SetLayoutFlags(button, AbsoluteLayoutFlags.All);
+        button.Clicked += (sender, e) =>
+        {
+            ViewTask();
+        };
+
+        Label titleLabel = new Label
+        {
+            Margin = new Thickness(40, 10, 0, 0),
+            Text = title,
+            TextColor = titleColor,
+            FontSize = 20
+        };
+
+        Label dueLabel = new Label();
+        if (!noDeadline)
+        {
+            dueLabel = new Label
             {
-                BackgroundColor = Color.FromHex("#4D4D4D"),
-                CornerRadius = 15,
-                Margin = new Thickness(8, 3, 8, 0),
-                HeightRequest = 30,
-                Padding = 12
-            };
-
-            AbsoluteLayout absoluteLayout = new AbsoluteLayout();
-
-            RadioButton radioButton = new RadioButton();
-            radioButton.CheckedChanged += (sender, e) =>
-            {
-                destroy(this, frame, task);
-            };
-
-            Button button = new Button
-            {
-                BackgroundColor = Colors.Transparent,
-                Margin = new Thickness(35, -12, -12, -12)
-            };
-            //AbsoluteLayout.SetLayoutBounds(button, new Rect(0, 0, 1, 1));
-            //AbsoluteLayout.SetLayoutFlags(button, AbsoluteLayoutFlags.All);
-            button.Clicked += (sender, e) =>
-            {
-                ViewTask();
-            };
-
-            string daysLeft = Date.GetDaysLeft(date);
-
-            Label label = new Label
-            {
-                Margin = new Thickness(35, 0, 0, 0),
-                Text = title + " " + daysLeft,
-                TextColor = Colors.White,
+                Margin = new Thickness(40, 40, 0, 0),
+                Text = daysLeft,
+                TextColor = color,
                 FontSize = 20
             };
+        }
 
-            frame.Content = absoluteLayout;
+        frame.Content = absoluteLayout;
 
-            absoluteLayout.Children.Add(label);
-            absoluteLayout.Children.Add(button);
-            absoluteLayout.Children.Add(radioButton);
+        absoluteLayout.Children.Add(titleLabel);
+        if (!noDeadline) absoluteLayout.Children.Add(dueLabel);
+        absoluteLayout.Children.Add(button);
+        absoluteLayout.Children.Add(radioButton);
 
+        if (!display)
+        {
             Data.tasks.Add(task);
-
             SaveTask();
-            return frame;
         }
+
+        return frame;
     }
 
     public void SaveTask()
