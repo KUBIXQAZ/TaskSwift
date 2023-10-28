@@ -10,8 +10,34 @@ public partial class AddTaskPage : ContentPage
 	{
 		InitializeComponent();
 
+        TimeCheckbox_CheckedChanged(null, null);
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
         TaskDate.MinimumDate = DateTime.Now;
         TaskTime.Time = DateTime.Now.TimeOfDay;
+
+        TimeCheckbox.IsChecked = false;
+        Title.Text = string.Empty;
+
+        Device.StartTimer(TimeSpan.FromMilliseconds(1), () =>
+        {
+            DateTime taskDate = TaskDate.Date;
+            DateTime currDate = DateTime.Now.Date;
+            if (taskDate == currDate)
+            {
+                TimeSpan taskTime = TaskTime.Time;
+                TimeSpan currTime = DateTime.Now.TimeOfDay;
+                if (taskTime < currTime)
+                {
+                    TaskTime.Time = DateTime.Now.TimeOfDay;
+                }
+            }
+            return true;
+        });
     }
 
     public Frame GenerateTask(string title, DateTime date, bool noDeadline, bool display, Task task)
@@ -153,21 +179,6 @@ public partial class AddTaskPage : ContentPage
         else TaskTime.IsEnabled = false;
     }
 
-    private void TaskTime_Unfocused(object sender, FocusEventArgs e)
-    {
-        DateTime taskDate = TaskDate.Date;
-        DateTime currDate = DateTime.Now.Date;
-        if (taskDate == currDate)
-        {
-            TimeSpan taskTime = TaskTime.Time;
-            TimeSpan currTime = DateTime.Now.TimeOfDay;
-            if (taskTime < currTime)
-            {
-                TaskTime.Time = DateTime.Now.TimeOfDay;
-            }
-        }
-    }
-
     public void CheckEntry(object sender, EventArgs e)
     {
         int i = 0;
@@ -177,6 +188,11 @@ public partial class AddTaskPage : ContentPage
 
         if (i <= 0) submit.IsEnabled = false;
         else submit.IsEnabled = true;
+    }
+
+    private void OnTimePickerUnfocused(object sender, FocusEventArgs e)
+    {
+        Submit.Text = "asd";
     }
 
     private void DeadlineCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)

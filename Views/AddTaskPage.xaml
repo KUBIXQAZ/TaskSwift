@@ -35,8 +35,7 @@
             </FlexLayout>
             <TimePicker TextColor="White"
                         Margin="20,0,20,0"
-                        x:Name="TaskTime"
-                        Unfocused="TaskTime_Unfocused"></TimePicker>
+                        x:Name="TaskTime"></TimePicker>
             <Button Text="Submit"
                     BackgroundColor="#4D4D4D"
                     TextColor="White"

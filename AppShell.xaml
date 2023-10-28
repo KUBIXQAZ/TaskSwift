@@ -17,13 +17,13 @@
     </Shell.Resources>
     <TabBar>
         <Tab Title="Home" Icon="house_door.svg">
-            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="MainPage"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="//MainPage"></ShellContent>
         </Tab>
         <Tab Title="Profile" Icon="person.svg">
-            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="//ProfilePage"></ShellContent>
         </Tab>
         <Tab Title="Add" Icon="plus_square.svg">
-            <ShellContent ContentTemplate="{DataTemplate views:AddTaskPage}" Route="AddTaskPage"></ShellContent>
+            <ShellContent ContentTemplate="{DataTemplate views:AddTaskPage}" Route="//AddTaskPage"></ShellContent>
         </Tab>
     </TabBar>
 </Shell>
