@@ -81,6 +81,12 @@ public partial class AddTaskPage : ContentPage
         radioButton.CheckedChanged += (sender, e) =>
         {
             destroy(this, frame, task);
+
+            if (Date.GetOverdue(date)) Data.stats.tasksDoneOverdue++;
+            else Data.stats.tasksDone++;
+
+            Data.stats.tasksPending = Data.tasks.Count;
+            SaveStats();
         };
 
         Button button = new Button
@@ -134,10 +140,7 @@ public partial class AddTaskPage : ContentPage
     {
         string json = JsonConvert.SerializeObject(Data.tasks);
 
-        string fileName = "Reminder.json";
-        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), fileName);
-
-        File.WriteAllText(filePath, json);
+        File.WriteAllText(jsonSettings.getTasksStorageFilePath(), json);
     }
     
     public void destroy(object sender, Frame frame, Task task)
@@ -147,9 +150,16 @@ public partial class AddTaskPage : ContentPage
         SaveTask();
     }
 
+    public void SaveStats()
+    {
+        string json = JsonConvert.SerializeObject(Data.stats);
+
+        File.WriteAllText(jsonSettings.getStatsFileNamePath(), json);
+    }
+
     public void ViewTask()
     {
-
+        
     }
 
     public async void AddTaskButton(object sender, EventArgs e)
@@ -170,6 +180,9 @@ public partial class AddTaskPage : ContentPage
 
         Title.Text = string.Empty;
 
+        Data.stats.tasksPending = Data.tasks.Count;
+        SaveStats();
+
         await Shell.Current.GoToAsync("//MainPage");
     }
 
@@ -188,11 +201,6 @@ public partial class AddTaskPage : ContentPage
 
         if (i <= 0) submit.IsEnabled = false;
         else submit.IsEnabled = true;
-    }
-
-    private void OnTimePickerUnfocused(object sender, FocusEventArgs e)
-    {
-        Submit.Text = "asd";
     }
 
     private void DeadlineCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)

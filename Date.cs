@@ -24,5 +24,13 @@
 
             return result;
         }
+
+        public static bool GetOverdue(DateTime taskDate)
+        {
+            TimeSpan daysLeft = taskDate - DateTime.Now;
+
+            if (daysLeft.TotalMicroseconds < 0) return true;
+            else return false;
+        }
     }
 }

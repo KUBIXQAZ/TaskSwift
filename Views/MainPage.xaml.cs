@@ -23,12 +23,9 @@ public partial class MainPage : ContentPage
 
     private void LoadJson()
     {
-        string fileName = "Reminder.json";
-        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), fileName);
-
-        if (File.Exists(filePath))
+        if (File.Exists(jsonSettings.getTasksStorageFilePath()))
         {
-            string json = File.ReadAllText(filePath);
+            string json = File.ReadAllText(jsonSettings.getTasksStorageFilePath());
             Data.tasks = JsonConvert.DeserializeObject<List<Task>>(json);
         }
     }

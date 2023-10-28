@@ -12,10 +12,19 @@
         }
     }
 
+    public class Stats
+    {
+        public int tasksDone { set; get; }
+        public int tasksDoneOverdue { set; get; }
+        public int tasksPending { set; get; }
+    }
+
     internal class Data
     {
         public static List<Task> tasks = new List<Task>();
-
+        
+        public static Stats stats = new Stats();
+        
         public static Task createTask(string title, DateTime date, bool noDeadline)
         {
             Task task = new Task();
