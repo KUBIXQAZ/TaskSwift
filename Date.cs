@@ -1,4 +1,6 @@
-﻿namespace TaskSwift
+﻿using System.Data;
+
+namespace TaskSwift
 {
     internal class Date
     {
@@ -23,6 +25,18 @@
             else result = "Overdue.";
 
             return result;
+        }
+
+        public static TimeSpan GetTimeLeftNow(DateTime taskDate)
+        {
+            TimeSpan daysLeft = taskDate - DateTime.Now;
+            return daysLeft;
+        }
+
+        public static TimeSpan GetTimeLeft(DateTime taskDate, DateTime now)
+        {
+            TimeSpan daysLeft = taskDate - now;
+            return daysLeft;
         }
 
         public static bool GetOverdue(DateTime taskDate)
