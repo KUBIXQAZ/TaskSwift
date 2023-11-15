@@ -19,8 +19,7 @@
                    x:Name="Title"
                    TextChanged="CheckEntry"></Entry>
             <FlexLayout Margin="20,0,20,0">
-                <CheckBox IsChecked="True"
-                          CheckedChanged="DeadlineCheckbox_CheckedChanged" 
+                <CheckBox CheckedChanged="DeadlineCheckbox_CheckedChanged" 
                           x:Name="DeadlineCheckbox"
                           Color="#66B4FF"></CheckBox>
                 <Label Text="Set deadline."
@@ -33,7 +32,6 @@
             <FlexLayout Margin="20,0,20,0">
                 <CheckBox CheckedChanged="TimeCheckbox_CheckedChanged"
                           x:Name="TimeCheckbox"
-                          IsChecked="False"
                           Color="#66B4FF"></CheckBox>
                 <Label Text="Time."
                        TextColor="#a6a6a6"

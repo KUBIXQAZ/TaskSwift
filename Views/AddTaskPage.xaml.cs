@@ -10,8 +10,6 @@ public partial class AddTaskPage : ContentPage
 	public AddTaskPage()
 	{
 		InitializeComponent();
-
-        TimeCheckbox_CheckedChanged(null, null);
     }
 
     protected override void OnAppearing()
@@ -22,8 +20,12 @@ public partial class AddTaskPage : ContentPage
         TaskTime.Time = DateTime.Now.TimeOfDay;
         TaskDate.Date = DateTime.Now;
 
-        DeadlineCheckbox.IsChecked = true; 
+        DeadlineCheckbox.IsChecked = false; 
         TimeCheckbox.IsChecked = false;
+
+        DeadlineCheckbox_CheckedChanged(null,null);
+        TimeCheckbox_CheckedChanged(null, null);
+
         Title.Text = string.Empty;
 
         Device.StartTimer(TimeSpan.FromMilliseconds(1), () =>
@@ -217,14 +219,15 @@ public partial class AddTaskPage : ContentPage
     {
         if (DeadlineCheckbox.IsChecked == true)
         {
-            TaskTime.IsEnabled = true;
             TaskDate.IsEnabled = true;
+            TaskTime.IsEnabled = false;
             TimeCheckbox.IsEnabled = true;
+            TimeCheckbox.IsChecked = false;
         }
         else
         {
-            TaskTime.IsEnabled = false;
             TaskDate.IsEnabled = false;
+            TaskTime.IsEnabled = false;
             TimeCheckbox.IsEnabled = false;
             TimeCheckbox.IsChecked = false;
         }
