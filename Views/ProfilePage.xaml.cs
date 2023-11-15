@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.CompilerServices;
 
 namespace TaskSwift.Views;
 
@@ -7,7 +7,7 @@ public partial class ProfilePage : ContentPage
 {
 	public ProfilePage()
 	{
-		InitializeComponent();
+        InitializeComponent();
 
         LoadStats();
     }
@@ -35,8 +35,9 @@ public partial class ProfilePage : ContentPage
     public void displayCurrent()
     {
         StackLayoutCurrTask.Children.Clear();
+        currectTaskText.Children.Clear();
 
-        List<Task> tasksWithDeadline = new List<Task>();
+        List<Task> tasksWithDeadline = tasksWithDeadline = new List<Task>();
         for (int i = 0; i < Data.tasks.Count; i++)
         {
             if (!Data.tasks[i].noDeadline)
@@ -48,6 +49,19 @@ public partial class ProfilePage : ContentPage
         List<Task> currTasks = new List<Task>();
         Task currTask = null;
         DateTime now = Date.GetDate();
+
+        if(tasksWithDeadline.Count != 0)
+        {
+            Label sectionTitle = new Label
+            {
+                Text = "Current Task",
+                TextColor = Color.FromHex("#C0C0C0"),
+                FontSize = 20,
+                Margin = new Thickness(0, 10, 0, 5)
+            };
+
+            currectTaskText.Children.Add(sectionTitle);
+        }
 
         foreach (Task task in tasksWithDeadline)
         {

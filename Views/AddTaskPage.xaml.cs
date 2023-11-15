@@ -1,5 +1,6 @@
 using Microsoft.Maui;
 using Microsoft.Maui.Layouts;
+using Microsoft.Maui.Platform;
 using Newtonsoft.Json;
 
 namespace TaskSwift.Views;
@@ -19,7 +20,9 @@ public partial class AddTaskPage : ContentPage
 
         TaskDate.MinimumDate = DateTime.Now;
         TaskTime.Time = DateTime.Now.TimeOfDay;
+        TaskDate.Date = DateTime.Now;
 
+        DeadlineCheckbox.IsChecked = true; 
         TimeCheckbox.IsChecked = false;
         Title.Text = string.Empty;
 
@@ -80,13 +83,7 @@ public partial class AddTaskPage : ContentPage
         };
         radioButton.CheckedChanged += (sender, e) =>
         {
-            destroy(this, frame, task);
-
-            if (Date.GetOverdue(date)) Data.stats.tasksDoneOverdue++;
-            else Data.stats.tasksDone++;
-
-            Data.stats.tasksPending = Data.tasks.Count;
-            SaveStats();
+            destroy(this, frame, task, date);
         };
 
         Button button = new Button
@@ -143,11 +140,24 @@ public partial class AddTaskPage : ContentPage
         File.WriteAllText(jsonSettings.getTasksStorageFilePath(), json);
     }
     
-    public void destroy(object sender, Frame frame, Task task)
+    public void destroy(object sender, Frame frame, Task task, DateTime date)
     {
         Data.tasks.Remove(task);
         MainPage.tasksContainer.Children.Remove(frame);
+
         SaveTask();
+
+        var currentShellItem = Shell.Current.CurrentPage;
+
+        if(currentShellItem is ProfilePage profilePage) {
+            profilePage.displayCurrent();
+        }
+
+        if (Date.GetOverdue(date)) Data.stats.tasksDoneOverdue++;
+        else Data.stats.tasksDone++;
+
+        Data.stats.tasksPending = Data.tasks.Count;
+        SaveStats();
     }
 
     public void SaveStats()
