@@ -32,6 +32,17 @@ public partial class ProfilePage : ContentPage
         }
     }
 
+
+    LinearGradientBrush gradient = new LinearGradientBrush
+    {
+        GradientStops =
+                {
+                    new GradientStop(Color.FromHex("#66B4FF"), 0),
+                    new GradientStop(Color.FromHex("#428bff"), 0.5f),
+                    new GradientStop(Color.FromHex("#66B4FF"), 1),
+                }
+    };
+    int max = 3;
     public void displayCurrent()
     {
         StackLayoutCurrTask.Children.Clear();
@@ -50,7 +61,7 @@ public partial class ProfilePage : ContentPage
         Task currTask = null;
         DateTime now = Date.GetDate();
 
-        if(tasksWithDeadline.Count != 0)
+        if(Data.tasks.Count != 0)
         {
             Label sectionTitle = new Label
             {
@@ -83,10 +94,74 @@ public partial class ProfilePage : ContentPage
             }
         }
 
+        if(tasksWithDeadline.Count == 0)
+        {
+            if(Data.tasks.Count > 0)
+            {
+                currTasks = Data.tasks;
+            }
+        }
+
+        int taskNum = 0;
         foreach (Task task in currTasks)
         {
+            if (taskNum >= max) break;
             AddTaskPage at = new AddTaskPage();
             StackLayoutCurrTask.Children.Add(at.GenerateTask(task.title, task.date, task.noDeadline, true, task));
+            taskNum++;
+        }
+
+        if (Data.tasks.Count != 0)
+        {
+            var displayMoreButton = new Button
+            {
+                Text = "Show more.",
+                Background = gradient,
+                TextColor = Color.FromHex("#121212"),
+                FontSize = 16,
+                FontAttributes = FontAttributes.Bold,
+                WidthRequest = 120,
+                HeightRequest = 30,
+                Padding = 0,
+                Margin = 8
+            };
+            displayMoreButton.Clicked += (sender, e) =>
+            {
+                if (Data.tasks.Count > taskNum) max += 3;
+                displayCurrent();
+            };
+            var displayLessButton = new Button
+            {
+                Text = "Show less.",
+                Background = gradient,
+                TextColor = Color.FromHex("#121212"),
+                FontSize = 16,
+                FontAttributes = FontAttributes.Bold,
+                WidthRequest = 120,
+                HeightRequest = 30,
+                Padding = 0,
+                Margin = 8
+            };
+            displayLessButton.Clicked += (sender, e) =>
+            {
+                max -= 3;
+                if (max < 3) max = 3;
+                displayCurrent();
+            };
+
+            StackLayout stackLayout = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.CenterAndExpand
+            };
+
+            if (taskNum <= 3) stackLayout.Children.Remove(displayLessButton);
+            else if (taskNum > 3) stackLayout.Children.Add(displayLessButton);
+
+            if (Data.tasks.Count > taskNum) stackLayout.Children.Add(displayMoreButton);
+            else if (Data.tasks.Count == taskNum) stackLayout.Children.Remove(displayMoreButton);
+
+            StackLayoutCurrTask.Children.Add(stackLayout);
         }
     }
 

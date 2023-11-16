@@ -7,60 +7,60 @@
         <mct:StatusBarBehavior StatusBarColor="#121212" StatusBarStyle="LightContent"></mct:StatusBarBehavior>
     </Page.Behaviors>
     <Grid BackgroundColor="#121212">
-        <VerticalStackLayout Padding="10">
-            <Label Text="Tasks Overview"
+        <ScrollView>
+            <VerticalStackLayout Padding="10">
+                <Label Text="Tasks Overview"
                    TextColor="#C0C0C0"
                    FontSize="20"
                    Margin="0,0,0,5"></Label>
-            <Frame Background="#212121"
+                <Frame Background="#212121"
                    BorderColor="Transparent"
                    CornerRadius="20">
-                <HorizontalStackLayout HorizontalOptions="Center">
-                    <VerticalStackLayout>
-                        <Label TextColor="#66B4FF" 
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <VerticalStackLayout>
+                            <Label TextColor="#66B4FF" 
                            FontSize="57" 
                            HorizontalTextAlignment="Center" 
                            Text="0"
                            x:Name="doneText"></Label>
-                        <Label TextColor="#C0C0C0" 
+                            <Label TextColor="#C0C0C0" 
                            FontSize="16" 
                            HorizontalTextAlignment="Center" 
                            Text="done"></Label>
-                    </VerticalStackLayout>
-                    <VerticalStackLayout Margin="35,0,35,0">
-                        <Label TextColor="#66B4FF" 
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="35,0,35,0">
+                            <Label TextColor="#66B4FF" 
                            FontSize="57" 
                            HorizontalTextAlignment="Center" 
                            Text="0"
                            x:Name="doneOverdueText"></Label>
-                        <Label TextColor="#C0C0C0" 
+                            <Label TextColor="#C0C0C0" 
                            FontSize="16" 
                            HorizontalTextAlignment="Center" 
                            Text="done overdue"></Label>
-                    </VerticalStackLayout>
-                    <VerticalStackLayout>
-                        <Label TextColor="#66B4FF" 
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label TextColor="#66B4FF" 
                            FontSize="57" 
                            HorizontalTextAlignment="Center" 
                            Text="0"
                            x:Name="pendingText"></Label>
-                        <Label TextColor="#C0C0C0" 
+                            <Label TextColor="#C0C0C0" 
                            FontSize="16" 
                            HorizontalTextAlignment="Center" 
                            Text="pending"></Label>
-                    </VerticalStackLayout>
-                </HorizontalStackLayout>
-            </Frame>
-            <StackLayout x:Name="currectTaskText">
-                <!--<Label Text="Current Task"
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Frame>
+                <StackLayout x:Name="currectTaskText">
+                    <!--<Label Text="Current Task"
                    TextColor="#C0C0C0"
                    FontSize="20"
                    Margin="0,10,0,5"></Label>-->
-            </StackLayout>
-            <ScrollView>
+                </StackLayout>
                 <StackLayout x:Name="StackLayoutCurrTask"
                          Padding="-8, 0, -8, 0"></StackLayout>
-            </ScrollView>
-        </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>

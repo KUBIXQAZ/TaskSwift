@@ -99,6 +99,8 @@ public partial class AddTaskPage : ContentPage
             ViewTask();
         };
 
+        if(title.Length > 32) title = title.Substring(0,32) + "...";
+
         Label titleLabel = new Label
         {
             Margin = new Thickness(40, 10, 0, 0),
@@ -131,7 +133,6 @@ public partial class AddTaskPage : ContentPage
             Data.tasks.Add(task);
             SaveTask();
         }
-
         return frame;
     }
 
