@@ -127,7 +127,7 @@ public partial class ProfilePage : ContentPage
             };
             displayMoreButton.Clicked += (sender, e) =>
             {
-                if (Data.tasks.Count > taskNum) max += 3;
+                if (currTasks.Count > taskNum) max += 3;
                 displayCurrent();
             };
             var displayLessButton = new Button
@@ -158,8 +158,8 @@ public partial class ProfilePage : ContentPage
             if (taskNum <= 3) stackLayout.Children.Remove(displayLessButton);
             else if (taskNum > 3) stackLayout.Children.Add(displayLessButton);
 
-            if (Data.tasks.Count > taskNum) stackLayout.Children.Add(displayMoreButton);
-            else if (Data.tasks.Count == taskNum) stackLayout.Children.Remove(displayMoreButton);
+            if (currTasks.Count > taskNum) stackLayout.Children.Add(displayMoreButton);
+            else if (currTasks.Count == taskNum) stackLayout.Children.Remove(displayMoreButton);
 
             StackLayoutCurrTask.Children.Add(stackLayout);
         }
