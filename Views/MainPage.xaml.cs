@@ -19,6 +19,7 @@ public partial class MainPage : ContentPage
 
         LoadJson();
         displayTasks();
+        DisplayWhenNoTasks();
     }
 
     private void LoadJson()
@@ -30,12 +31,29 @@ public partial class MainPage : ContentPage
         }
     }
 
+    public static void DisplayWhenNoTasks()
+    {
+        if (Data.tasks.Count == 0)
+        {
+            var noTasksLabel = new Label
+            {
+                Text = "You have nothing planned yet.",
+                FontSize = 16,
+                TextColor = Color.FromHex("#C0C0C0"),
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.CenterAndExpand
+            };
+
+            tasksContainer.Children.Add(noTasksLabel);
+        }
+    }
+
     public void displayTasks()
     {
         tasksContainer.Children.Clear();
 
         int tasksCount = Data.tasks.Count;
-        
+
         for (int i = 0; i < tasksCount; i++)
         {
             string taskTitle = Data.tasks[i].Title();

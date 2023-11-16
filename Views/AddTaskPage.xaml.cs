@@ -160,6 +160,8 @@ public partial class AddTaskPage : ContentPage
 
         Data.stats.tasksPending = Data.tasks.Count;
         SaveStats();
+
+        MainPage.DisplayWhenNoTasks();
     }
 
     public void SaveStats()
