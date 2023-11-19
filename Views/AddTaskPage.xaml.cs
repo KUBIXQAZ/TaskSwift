@@ -1,7 +1,8 @@
-using Microsoft.Maui;
 using Microsoft.Maui.Layouts;
-using Microsoft.Maui.Platform;
 using Newtonsoft.Json;
+using Microsoft.Maui.Graphics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Threading.Tasks;
 
 namespace TaskSwift.Views;
 
@@ -45,27 +46,10 @@ public partial class AddTaskPage : ContentPage
         });
     }
 
-    public Frame GenerateTask(string title, DateTime date, bool noDeadline, bool display, Task task)
+    public Frame GenerateElementWithoutDeadline(Task task, string title)
     {
-        string daysLeft = Date.GetDaysLeft(date);
-        Color color = Colors.White;
         Color bgColor = Color.FromRgb(77, 77, 77);
         Color titleColor = Colors.White;
-
-        if (!display) task = Data.createTask(title, date, noDeadline);
-
-        int heightRequest;
-        if (!noDeadline)
-        {
-            heightRequest = 78;
-            if (daysLeft == "Overdue.")
-            {
-                color = Color.FromRgb(163, 15, 15);
-                titleColor = Color.FromRgb(179, 179, 179);
-                bgColor = Color.FromRgb(64, 54, 54);
-            }
-        }
-        else heightRequest = 50;
 
         Frame frame = new Frame
         {
@@ -73,7 +57,90 @@ public partial class AddTaskPage : ContentPage
             CornerRadius = 15,
             BorderColor = Colors.Transparent,
             Margin = new Thickness(8, 3, 8, 0),
-            HeightRequest = heightRequest,
+            HeightRequest = 50,
+            Padding = 0
+        };
+
+        AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+
+        RadioButton radioButton = new RadioButton
+        {
+            Margin = new Thickness(6, 5, 0, 0)
+        };
+        radioButton.CheckedChanged += (sender, e) =>
+        {
+            Data.tasks.Remove(task);
+            MainPage.tasksContainer.Children.Remove(frame);
+
+            SaveTask();
+
+            var currentShellItem = Shell.Current.CurrentPage;
+
+            if (currentShellItem is ProfilePage profilePage)
+            {
+                profilePage.displayCurrent();
+                profilePage.DisplayStats();
+            }
+
+            Data.stats.tasksDone++;
+            Data.stats.tasksPending = Data.tasks.Count;
+
+            SaveStats();
+
+            MainPage.DisplayWhenNoTasks();
+        };
+
+        Button button = new Button
+        {
+            BackgroundColor = Colors.Transparent,
+        };
+        AbsoluteLayout.SetLayoutBounds(button, new Rect(0, 0, 1, 1));
+        AbsoluteLayout.SetLayoutFlags(button, AbsoluteLayoutFlags.All);
+        button.Clicked += (sender, e) =>
+        {
+            ViewTask();
+        };
+
+        if (title.Length > 29) title = title.Substring(0, 29) + "...";
+
+        Label titleLabel = new Label
+        {
+            Margin = new Thickness(40, 10, 0, 0),
+            Text = title,
+            TextColor = titleColor,
+            FontSize = 20
+        };
+
+        frame.Content = absoluteLayout;
+
+        absoluteLayout.Children.Add(titleLabel);
+        absoluteLayout.Children.Add(button);
+        absoluteLayout.Children.Add(radioButton);
+
+        return frame;
+    }
+
+    public Frame GenerateElementWithDeadline(Task task, DateTime date, string title)
+    {
+        string daysLeft = Date.GetDaysLeft(date);
+        Color color = Colors.White;
+        Color bgColor = Color.FromRgb(77, 77, 77);
+        Color titleColor = Colors.White;
+
+        if (daysLeft == "Overdue.")
+        {
+            color = Color.FromRgb(163, 15, 15);
+            titleColor = Color.FromRgb(179, 179, 179);
+            bgColor = Color.FromRgb(64, 54, 54);
+        }
+
+        Frame frame = new Frame
+        {
+            BackgroundColor = bgColor,
+            CornerRadius = 15,
+            BorderColor = Colors.Transparent,
+            Margin = new Thickness(8, 3, 8, 0),
+            HeightRequest = 78,
             Padding = 0
         };
 
@@ -99,7 +166,7 @@ public partial class AddTaskPage : ContentPage
             ViewTask();
         };
 
-        if(title.Length > 32) title = title.Substring(0,32) + "...";
+        if (title.Length > 29) title = title.Substring(0, 29) + "...";
 
         Label titleLabel = new Label
         {
@@ -110,31 +177,47 @@ public partial class AddTaskPage : ContentPage
         };
 
         Label dueLabel = new Label();
-        if (!noDeadline)
+        dueLabel = new Label
         {
-            dueLabel = new Label
-            {
-                Margin = new Thickness(40, 40, 0, 0),
-                Text = daysLeft,
-                TextColor = color,
-                FontSize = 20
-            };
-        }
+            Margin = new Thickness(40, 40, 0, 0),
+            Text = daysLeft,
+            TextColor = color,
+            FontSize = 20
+        };
 
         frame.Content = absoluteLayout;
 
         absoluteLayout.Children.Add(titleLabel);
-        if (!noDeadline) absoluteLayout.Children.Add(dueLabel);
+        absoluteLayout.Children.Add(dueLabel);
         absoluteLayout.Children.Add(button);
         absoluteLayout.Children.Add(radioButton);
 
-        if (!display)
-        {
-            Data.tasks.Add(task);
-            SaveTask();
-        }
         return frame;
     }
+
+    public Frame DisplayTasks(Task task)
+    {
+        if (task.withDeadline) return GenerateElementWithDeadline(task, task.date.Value, task.title);
+        else return GenerateElementWithoutDeadline(task, task.title);
+    }
+
+    public void GenerateTask(bool withDeadline, string title, DateTime? date)
+    {
+        Task task;
+
+        if (withDeadline)
+        {
+            task = Data.createTask(title, date, withDeadline);
+        }
+        else
+        {
+            task = Data.createTask(title, null, withDeadline);
+        }
+
+        Data.tasks.Add(task);
+        SaveTask();
+    }
+
 
     public void SaveTask()
     {
@@ -189,9 +272,9 @@ public partial class AddTaskPage : ContentPage
 
         DateTime combinedDateTime = selectedDate.Add(selectedTime);
 
-        bool noDeadline = !DeadlineCheckbox.IsChecked;
+        bool withDeadline = DeadlineCheckbox.IsChecked;
 
-        GenerateTask(title, combinedDateTime, noDeadline, false, null);
+        GenerateTask(withDeadline, title, combinedDateTime);
 
         Title.Text = string.Empty;
 

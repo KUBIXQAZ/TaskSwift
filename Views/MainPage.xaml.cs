@@ -11,13 +11,14 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 
         tasksContainer = TasksContainer;
+
+        LoadJson();
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        LoadJson();
         displayTasks();
         DisplayWhenNoTasks();
     }
@@ -91,12 +92,10 @@ public partial class MainPage : ContentPage
 
         for (int i = 0; i < tasksCount; i++)
         {
-            string taskTitle = Data.tasks[i].Title();
-            DateTime date = Data.tasks[i].date;
-            bool noDeadline = Data.tasks[i].noDeadline;
-            
+            Task task = Data.tasks[i]; 
+
             AddTaskPage at = new AddTaskPage();
-            tasksContainer.Children.Add(at.GenerateTask(taskTitle, date, noDeadline, true, Data.tasks[i]));
+            tasksContainer.Children.Add(at.DisplayTasks(task));
         }
     }
 }
