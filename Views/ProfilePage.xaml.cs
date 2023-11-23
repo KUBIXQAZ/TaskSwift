@@ -9,8 +9,6 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
         InitializeComponent();
-
-        LoadStats();
     }
 
     protected override void OnAppearing()
@@ -27,16 +25,6 @@ public partial class ProfilePage : ContentPage
         doneOverdueText.Text = Data.stats.tasksDoneOverdue.ToString();
         pendingText.Text = Data.stats.tasksPending.ToString();
     }
-
-    public void LoadStats()
-    {
-        if(File.Exists(jsonSettings.getStatsFileNamePath()))
-        {
-            string json = File.ReadAllText(jsonSettings.getStatsFileNamePath());
-            Data.stats = JsonConvert.DeserializeObject<Stats>(json);
-        }
-    }
-
 
     LinearGradientBrush gradient = new LinearGradientBrush
     {

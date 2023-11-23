@@ -76,16 +76,16 @@ public partial class AddTaskPage : ContentPage
 
             var currentShellItem = Shell.Current.CurrentPage;
 
+            Data.stats.tasksDone++;
+            Data.stats.tasksPending = Data.tasks.Count;
+
+            SaveStats();
+
             if (currentShellItem is ProfilePage profilePage)
             {
                 profilePage.displayCurrent();
                 profilePage.DisplayStats();
             }
-
-            Data.stats.tasksDone++;
-            Data.stats.tasksPending = Data.tasks.Count;
-
-            SaveStats();
 
             MainPage.DisplayWhenNoTasks();
         };
@@ -235,15 +235,18 @@ public partial class AddTaskPage : ContentPage
 
         var currentShellItem = Shell.Current.CurrentPage;
 
-        if(currentShellItem is ProfilePage profilePage) {
-            profilePage.displayCurrent();
-        }
-
         if (Date.GetOverdue(date)) Data.stats.tasksDoneOverdue++;
         else Data.stats.tasksDone++;
 
         Data.stats.tasksPending = Data.tasks.Count;
         SaveStats();
+
+        if (currentShellItem is ProfilePage profilePage)
+        {
+            Console.WriteLine("bongbong " + Data.stats.tasksDone.ToString() + " " + Data.stats.tasksDoneOverdue.ToString() + " " + Data.stats.tasksPending.ToString());
+            profilePage.DisplayStats();
+            profilePage.displayCurrent();
+        }
 
         MainPage.DisplayWhenNoTasks();
     }
