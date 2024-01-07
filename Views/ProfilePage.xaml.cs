@@ -1,7 +1,3 @@
-using Newtonsoft.Json;
-using System.Runtime.CompilerServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace TaskSwift.Views;
 
 public partial class ProfilePage : ContentPage
@@ -100,8 +96,7 @@ public partial class ProfilePage : ContentPage
         {
             if (taskNum >= max) break;
 
-            AddTaskPage at = new AddTaskPage();
-            StackLayoutCurrTask.Children.Add(at.DisplayTasks(task));
+            StackLayoutCurrTask.Children.Add(Task.DisplayTasks(task));
             taskNum++;
         }
 

@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace TaskSwift.Views;
 
 public partial class MainPage : ContentPage
@@ -11,8 +9,6 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 
         tasksContainer = TasksContainer;
-
-        LoadJson();
     }
 
     protected override void OnAppearing()
@@ -21,15 +17,6 @@ public partial class MainPage : ContentPage
 
         displayTasks();
         DisplayWhenNoTasks();
-    }
-
-    private void LoadJson()
-    {
-        if (File.Exists(jsonSettings.getTasksStorageFilePath()))
-        {
-            string json = File.ReadAllText(jsonSettings.getTasksStorageFilePath());
-            Data.tasks = JsonConvert.DeserializeObject<List<Task>>(json);
-        }
     }
 
     public static void DisplayWhenNoTasks()
@@ -72,9 +59,9 @@ public partial class MainPage : ContentPage
                 Margin = 4
             };
 
-            button.Clicked += async (sender, e) =>
+            button.Clicked += (sender, e) =>
             {
-                await Shell.Current.GoToAsync("//AddTaskPage");
+                Shell.Current.GoToAsync("//AddTaskPage");
             };
 
             stack.Children.Add(label);
@@ -94,8 +81,7 @@ public partial class MainPage : ContentPage
         {
             Task task = Data.tasks[i]; 
 
-            AddTaskPage at = new AddTaskPage();
-            tasksContainer.Children.Add(at.DisplayTasks(task));
+            tasksContainer.Children.Add(Task.DisplayTasks(task));
         }
     }
 }

@@ -9,6 +9,7 @@ public partial class App : Application
 		InitializeComponent();
 
         LoadStats();
+        LoadJson();
 
         MainPage = new AppShell();
     }
@@ -20,5 +21,15 @@ public partial class App : Application
             string json = File.ReadAllText(jsonSettings.getStatsFileNamePath());
             Data.stats = JsonConvert.DeserializeObject<Stats>(json);
         }
+    }
+
+    private void LoadJson()
+    {
+        if (File.Exists(jsonSettings.getTasksStorageFilePath()))
+        {
+            string json = File.ReadAllText(jsonSettings.getTasksStorageFilePath());
+            Data.tasks = JsonConvert.DeserializeObject<List<Views.Task>>(json);
+        }
+        Console.WriteLine("asdas");
     }
 }
