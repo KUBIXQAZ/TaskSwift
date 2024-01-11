@@ -5,8 +5,8 @@ public partial class MainPage : ContentPage
     public static StackLayout tasksContainer;
 
     public MainPage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         tasksContainer = TasksContainer;
     }
@@ -77,11 +77,15 @@ public partial class MainPage : ContentPage
 
         int tasksCount = Data.tasks.Count;
 
+        StackLayout stackLayout = new StackLayout();
+
         for (int i = 0; i < tasksCount; i++)
         {
-            Task task = Data.tasks[i]; 
+            Task task = Data.tasks[i];
 
-            tasksContainer.Children.Add(Task.DisplayTasks(task));
+            stackLayout.Add(Task.DisplayTasks(task));
         }
+
+        tasksContainer.Children.Add(stackLayout);
     }
 }

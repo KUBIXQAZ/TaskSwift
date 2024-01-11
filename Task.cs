@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Layouts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TaskSwift.Views
 {
@@ -9,7 +8,7 @@ namespace TaskSwift.Views
         public DateTime? date { set; get; }
         public bool withDeadline { set; get; }
 
-        public Frame GenerateElementWithoutDeadline(Task task, string title)
+        public static Frame GenerateElementWithoutDeadline(Task task, string title)
         {
             Color bgColor = Color.FromRgb(77, 77, 77);
             Color titleColor = Colors.White;
@@ -24,48 +23,42 @@ namespace TaskSwift.Views
                 Padding = 0
             };
 
-            AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += ViewTask;
+            frame.GestureRecognizers.Add(tapGestureRecognizer);
 
-            RadioButton radioButton = new RadioButton
+            Grid grid = new Grid
             {
-                Margin = new Thickness(6, 5, 0, 0)
+                Padding = new Thickness(5, 0, 5, 0)
             };
+            grid.AddColumnDefinition(new ColumnDefinition { Width = 50 });
+            grid.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
+
+            RadioButton radioButton = new RadioButton();
             radioButton.CheckedChanged += (sender, e) =>
             {
                 destroy(frame, task, null);
-            };
-
-            Button button = new Button
-            {
-                BackgroundColor = Colors.Transparent,
-            };
-            AbsoluteLayout.SetLayoutBounds(button, new Rect(0, 0, 1, 1));
-            AbsoluteLayout.SetLayoutFlags(button, AbsoluteLayoutFlags.All);
-            button.Clicked += (sender, e) =>
-            {
-                ViewTask();
             };
 
             if (title.Length > 29) title = title.Substring(0, 29) + "...";
 
             Label titleLabel = new Label
             {
-                Margin = new Thickness(40, 10, 0, 0),
+                VerticalOptions = LayoutOptions.Center,
                 Text = title,
                 TextColor = titleColor,
                 FontSize = 20
             };
 
-            frame.Content = absoluteLayout;
+            grid.Add(radioButton, 0);
+            grid.Add(titleLabel, 1);
 
-            absoluteLayout.Children.Add(titleLabel);
-            absoluteLayout.Children.Add(button);
-            absoluteLayout.Children.Add(radioButton);
+            frame.Content = grid;
 
             return frame;
         }
 
-        public Frame GenerateElementWithDeadline(Task task, DateTime date, string title)
+        public static Frame GenerateElementWithDeadline(Task task, DateTime date, string title)
         {
             string daysLeft = Date.GetDaysLeft(date);
             Color color = Colors.White;
@@ -89,33 +82,21 @@ namespace TaskSwift.Views
                 Padding = 0
             };
 
-            AbsoluteLayout absoluteLayout = new AbsoluteLayout();
+            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += ViewTask;
+            frame.GestureRecognizers.Add(tapGestureRecognizer);
 
-            RadioButton radioButton = new RadioButton
-            {
-                Margin = new Thickness(6, 5, 0, 0)
-            };
+            RadioButton radioButton = new RadioButton();
             radioButton.CheckedChanged += (sender, e) =>
             {
                 destroy(frame, task, date);
-            };
-
-            Button button = new Button
-            {
-                BackgroundColor = Colors.Transparent,
-            };
-            AbsoluteLayout.SetLayoutBounds(button, new Rect(0, 0, 1, 1));
-            AbsoluteLayout.SetLayoutFlags(button, AbsoluteLayoutFlags.All);
-            button.Clicked += (sender, e) =>
-            {
-                ViewTask();
             };
 
             if (title.Length > 29) title = title.Substring(0, 29) + "...";
 
             Label titleLabel = new Label
             {
-                Margin = new Thickness(40, 10, 0, 0),
+                VerticalOptions = LayoutOptions.Center,
                 Text = title,
                 TextColor = titleColor,
                 FontSize = 20
@@ -124,27 +105,35 @@ namespace TaskSwift.Views
             Label dueLabel = new Label();
             dueLabel = new Label
             {
-                Margin = new Thickness(40, 40, 0, 0),
                 Text = daysLeft,
                 TextColor = color,
                 FontSize = 20
             };
 
-            frame.Content = absoluteLayout;
+            Grid grid = new Grid
+            {
+                Padding = new Thickness(5, 0, 5, 0)
+            };
+            grid.AddColumnDefinition(new ColumnDefinition { Width = 50 });
+            grid.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
+            grid.AddRowDefinition(new RowDefinition { Height = GridLength.Star });
+            grid.AddRowDefinition(new RowDefinition { Height = GridLength.Star });
 
-            absoluteLayout.Children.Add(titleLabel);
-            absoluteLayout.Children.Add(dueLabel);
-            absoluteLayout.Children.Add(button);
-            absoluteLayout.Children.Add(radioButton);
+            grid.Add(radioButton, 0, 0);
+            grid.SetColumnSpan(radioButton, 2);
+
+            grid.Add(titleLabel, 1, 0);
+            grid.Add(dueLabel, 1, 1);
+
+            frame.Content = grid;
 
             return frame;
         }
 
         public static Frame DisplayTasks(Task task)
         {
-            Task x = new Task();
-            if (task.withDeadline) return x.GenerateElementWithDeadline(task, task.date.Value, task.title);
-            else return x.GenerateElementWithoutDeadline(task, task.title);
+            if (task.withDeadline) return GenerateElementWithDeadline(task, task.date.Value, task.title);
+            else return GenerateElementWithoutDeadline(task, task.title);
         }
 
         public static Task createTask(string title, DateTime? date, bool withDeadline)
@@ -170,7 +159,7 @@ namespace TaskSwift.Views
             File.WriteAllText(jsonSettings.getStatsFileNamePath(), json);
         }
 
-        public void destroy(Frame frame, Task task, DateTime? date)
+        public static void destroy(Frame frame, Task task, DateTime? date)
         {
             Data.tasks.Remove(task);
             MainPage.tasksContainer.Children.Remove(frame);
@@ -179,8 +168,8 @@ namespace TaskSwift.Views
 
             var currentShellItem = Shell.Current.CurrentPage;
 
-            if(date != null) if (Date.GetOverdue(date.Value)) Data.stats.tasksDoneOverdue++;
-            else Data.stats.tasksDone++;
+            if (date != null) if (Date.GetOverdue(date.Value)) Data.stats.tasksDoneOverdue++;
+                else Data.stats.tasksDone++;
             Data.stats.tasksPending = Data.tasks.Count;
 
             SaveStats();
@@ -194,7 +183,7 @@ namespace TaskSwift.Views
             MainPage.DisplayWhenNoTasks();
         }
 
-        public void ViewTask()
+        public static void ViewTask(object sender, EventArgs e)
         {
 
         }
