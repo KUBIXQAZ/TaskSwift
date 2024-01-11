@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Maui.Views;
+using Newtonsoft.Json;
 
 namespace TaskSwift.Views
 {
@@ -24,7 +25,9 @@ namespace TaskSwift.Views
             };
 
             TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += ViewTask;
+            tapGestureRecognizer.Tapped += (s, e) => {
+                ViewTask(s, e, task);
+            };
             frame.GestureRecognizers.Add(tapGestureRecognizer);
 
             Grid grid = new Grid
@@ -83,7 +86,9 @@ namespace TaskSwift.Views
             };
 
             TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += ViewTask;
+            tapGestureRecognizer.Tapped += (s,e) => {
+                ViewTask(s,e,task);
+            };
             frame.GestureRecognizers.Add(tapGestureRecognizer);
 
             RadioButton radioButton = new RadioButton();
@@ -186,9 +191,13 @@ namespace TaskSwift.Views
             MainPage.DisplayWhenNoTasks();
         }
 
-        public static void ViewTask(object sender, EventArgs e)
+        public static async void ViewTask(object sender, EventArgs e, Task task)
         {
-
+            if(Shell.Current.CurrentPage is MainPage mainPage)
+            {
+                EditTaskPopup editTaskPopup = new EditTaskPopup(task);
+                await mainPage.ShowPopupAsync(editTaskPopup);
+            }
         }
     }
 }

@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+
 namespace TaskSwift.Views;
 
 public partial class MainPage : ContentPage
