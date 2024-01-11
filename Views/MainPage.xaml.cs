@@ -21,7 +21,7 @@ public partial class MainPage : ContentPage
 
     public static void DisplayWhenNoTasks()
     {
-        if (Data.tasks.Count == 0)
+        if (App.tasks.Count == 0)
         {
             var stack = new StackLayout
             {
@@ -75,13 +75,13 @@ public partial class MainPage : ContentPage
     {
         tasksContainer.Children.Clear();
 
-        int tasksCount = Data.tasks.Count;
+        int tasksCount = App.tasks.Count;
 
         StackLayout stackLayout = new StackLayout();
 
         for (int i = 0; i < tasksCount; i++)
         {
-            Task task = Data.tasks[i];
+            Task task = App.tasks[i];
 
             stackLayout.Add(Task.DisplayTasks(task));
         }

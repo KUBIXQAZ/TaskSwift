@@ -37,7 +37,7 @@ namespace TaskSwift.Views
             RadioButton radioButton = new RadioButton();
             radioButton.CheckedChanged += (sender, e) =>
             {
-                destroy(frame, task, null);
+                destroy(task, null);
             };
 
             if (title.Length > 29) title = title.Substring(0, 29) + "...";
@@ -89,7 +89,7 @@ namespace TaskSwift.Views
             RadioButton radioButton = new RadioButton();
             radioButton.CheckedChanged += (sender, e) =>
             {
-                destroy(frame, task, date);
+                destroy(task, date);
             };
 
             if (title.Length > 29) title = title.Substring(0, 29) + "...";
@@ -147,30 +147,29 @@ namespace TaskSwift.Views
 
         public static void SaveTask()
         {
-            string json = JsonConvert.SerializeObject(Data.tasks);
+            string json = JsonConvert.SerializeObject(App.tasks);
 
-            File.WriteAllText(jsonSettings.getTasksStorageFilePath(), json);
+            File.WriteAllText(App.tasksFilePath, json);
         }
 
         public static void SaveStats()
         {
-            string json = JsonConvert.SerializeObject(Data.stats);
+            string json = JsonConvert.SerializeObject(App.stats);
 
-            File.WriteAllText(jsonSettings.getStatsFileNamePath(), json);
+            File.WriteAllText(App.statsFilePath, json);
         }
 
-        public static void destroy(Frame frame, Task task, DateTime? date)
+        public static void destroy(Task task, DateTime? date)
         {
-            Data.tasks.Remove(task);
-            MainPage.tasksContainer.Children.Remove(frame);
+            App.tasks.Remove(task);
 
             SaveTask();
 
             var currentShellItem = Shell.Current.CurrentPage;
 
-            if (date != null) if (Date.GetOverdue(date.Value)) Data.stats.tasksDoneOverdue++;
-                else Data.stats.tasksDone++;
-            Data.stats.tasksPending = Data.tasks.Count;
+            if (date != null) if (Date.GetOverdue(date.Value)) App.stats.tasksDoneOverdue++;
+                else App.stats.tasksDone++;
+            App.stats.tasksPending = App.tasks.Count;
 
             SaveStats();
 
@@ -178,6 +177,10 @@ namespace TaskSwift.Views
             {
                 profilePage.DisplayStats();
                 profilePage.displayCurrent();
+            }
+            else if (currentShellItem is MainPage mainPage)
+            {
+                mainPage.displayTasks();
             }
 
             MainPage.DisplayWhenNoTasks();

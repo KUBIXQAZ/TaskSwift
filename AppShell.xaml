@@ -7,9 +7,8 @@
     xmlns:views="clr-namespace:TaskSwift.Views">
     <Shell.Resources>
         <ResourceDictionary>
-            <Color x:Key="TabBarColor">#1c1c1c</Color>
             <Style TargetType="TabBar">
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource TabBarColor}"/>
+                <Setter Property="Shell.TabBarBackgroundColor" Value="#1c1c1c"/>
                 <Setter Property="Shell.TabBarTitleColor" Value="#66B4FF" />
                 <Setter Property="Shell.TabBarUnselectedColor" Value="gray" />
             </Style>

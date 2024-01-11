@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace TaskSwift
+﻿namespace TaskSwift
 {
     internal class Date
     {

@@ -53,7 +53,7 @@ public partial class AddTaskPage : ContentPage
             task = Task.createTask(title, null, withDeadline);
         }
 
-        Data.tasks.Add(task);
+        App.tasks.Add(task);
         Task.SaveTask();
     }
 
@@ -75,7 +75,7 @@ public partial class AddTaskPage : ContentPage
 
         Title.Text = string.Empty;
 
-        Data.stats.tasksPending = Data.tasks.Count;
+        App.stats.tasksPending = App.tasks.Count;
 
         Task.SaveStats();
 

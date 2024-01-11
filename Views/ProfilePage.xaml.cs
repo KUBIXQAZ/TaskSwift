@@ -17,9 +17,9 @@ public partial class ProfilePage : ContentPage
 
     public void DisplayStats()
     {
-        doneText.Text = Data.stats.tasksDone.ToString();
-        doneOverdueText.Text = Data.stats.tasksDoneOverdue.ToString();
-        pendingText.Text = Data.stats.tasksPending.ToString();
+        doneText.Text = App.stats.tasksDone.ToString();
+        doneOverdueText.Text = App.stats.tasksDoneOverdue.ToString();
+        pendingText.Text = App.stats.tasksPending.ToString();
     }
 
     LinearGradientBrush gradient = new LinearGradientBrush
@@ -38,11 +38,11 @@ public partial class ProfilePage : ContentPage
         currectTaskText.Children.Clear();
 
         List<Task> tasksWithDeadline = tasksWithDeadline = new List<Task>();
-        for (int i = 0; i < Data.tasks.Count; i++)
+        for (int i = 0; i < App.tasks.Count; i++)
         {
-            if (Data.tasks[i].withDeadline)
+            if (App.tasks[i].withDeadline)
             {
-                tasksWithDeadline.Add(Data.tasks[i]);
+                tasksWithDeadline.Add(App.tasks[i]);
             }
         }
 
@@ -50,7 +50,7 @@ public partial class ProfilePage : ContentPage
         Task currTask = null;
         DateTime now = Date.GetDate();
 
-        if(Data.tasks.Count != 0)
+        if(App.tasks.Count != 0)
         {
             Label sectionTitle = new Label
             {
@@ -85,9 +85,9 @@ public partial class ProfilePage : ContentPage
 
         if(tasksWithDeadline.Count == 0)
         {
-            if(Data.tasks.Count > 0)
+            if(App.tasks.Count > 0)
             {
-                currTasks = Data.tasks;
+                currTasks = App.tasks;
             }
         }
 
@@ -100,7 +100,7 @@ public partial class ProfilePage : ContentPage
             taskNum++;
         }
 
-        if (Data.tasks.Count != 0)
+        if (App.tasks.Count != 0)
         {
             var displayMoreButton = new Button
             {
@@ -152,18 +152,5 @@ public partial class ProfilePage : ContentPage
 
             StackLayoutCurrTask.Children.Add(stackLayout);
         }
-    }
-
-    public void ResetStats()
-    {
-        File.Delete(jsonSettings.getStatsFileNamePath());
-
-        Data.stats.tasksDone = 0;
-        Data.stats.tasksDoneOverdue = 0;
-        Data.stats.tasksPending = Data.tasks.Count;
-
-        doneText.Text = Data.stats.tasksDone.ToString();
-        doneOverdueText.Text = Data.stats.tasksDoneOverdue.ToString();
-        pendingText.Text = Data.stats.tasksPending.ToString();
     }
 }
