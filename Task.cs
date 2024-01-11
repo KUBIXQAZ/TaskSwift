@@ -120,7 +120,7 @@ namespace TaskSwift.Views
             grid.AddRowDefinition(new RowDefinition { Height = GridLength.Star });
 
             grid.Add(radioButton, 0, 0);
-            grid.SetColumnSpan(radioButton, 2);
+            grid.SetRowSpan(radioButton, 2);
 
             grid.Add(titleLabel, 1, 0);
             grid.Add(dueLabel, 1, 1);
