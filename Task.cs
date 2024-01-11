@@ -193,10 +193,13 @@ namespace TaskSwift.Views
 
         public static async void ViewTask(object sender, EventArgs e, Task task)
         {
-            if(Shell.Current.CurrentPage is MainPage mainPage)
+            EditTaskPopup editTaskPopup = new EditTaskPopup(task);
+            if (Shell.Current.CurrentPage is MainPage mainPage)
             {
-                EditTaskPopup editTaskPopup = new EditTaskPopup(task);
                 await mainPage.ShowPopupAsync(editTaskPopup);
+            } else if (Shell.Current.CurrentPage is ProfilePage profilePage)
+            {
+                await profilePage.ShowPopupAsync(editTaskPopup);
             }
         }
     }
