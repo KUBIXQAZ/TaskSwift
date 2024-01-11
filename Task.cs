@@ -197,9 +197,11 @@ namespace TaskSwift.Views
             if (Shell.Current.CurrentPage is MainPage mainPage)
             {
                 await mainPage.ShowPopupAsync(editTaskPopup);
+                mainPage.displayTasks();
             } else if (Shell.Current.CurrentPage is ProfilePage profilePage)
             {
                 await profilePage.ShowPopupAsync(editTaskPopup);
+                profilePage.displayCurrent();
             }
         }
     }
