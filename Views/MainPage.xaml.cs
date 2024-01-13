@@ -47,6 +47,7 @@ public partial class MainPage : ContentPage
                     selectedFlagFrame = null;
                     selectedFlag = null;
                 }
+                displayTasks();
             };
 
             FlagsHorizontalStackLayout.Add(FlagModel.FlagUI(flag.Color, flag.Name, eventHandler));
@@ -111,17 +112,28 @@ public partial class MainPage : ContentPage
 
         StackLayout stackLayout = new StackLayout();
 
-        List<Task> tasks = App.tasks;
-        var groupedTasks = tasks.GroupBy(task => task.date?.Date);
+        List<Task> tasks = null;
+        if (selectedFlag != null)
+        {
+            tasks = new List<Task>();
+            foreach (Task task in App.tasks)
+            {
+                if(task.flag != null) if (Equals(task.flag.Name, selectedFlag.Name) && Equals(task.flag.Color, selectedFlag.Color)) tasks.Add(task);
+            }
+        }
+        else tasks = App.tasks;
+
+        var orderTasks = tasks.OrderByDescending(task => task.date).Reverse();
+        var groupedTasks = orderTasks.GroupBy(task => task.date.Date);
 
         foreach (var taskGroup in groupedTasks)
         {
-            DateTime? groupDate = taskGroup.Key;
+            DateTime groupDate = taskGroup.Key;
 
-            if (groupDate.HasValue)
+            if (groupDate != DateTime.MinValue)
             {
                 string title = null;
-                var daysLeft = Date.GetDayLeft(groupDate.Value);
+                var daysLeft = Date.GetDayLeft(groupDate);
                 if (daysLeft < 0) title = "Overdue.";
                 else if (daysLeft == 0) title = "Today.";
                 else title = $"{daysLeft} Days left.";
@@ -129,6 +141,16 @@ public partial class MainPage : ContentPage
                 Label sectionTitle = new Label
                 {
                     Text = title,
+                    TextColor = Color.FromHex("#C0C0C0"),
+                    FontSize = 20,
+                    Margin = new Thickness(5, 10, 0, 5)
+                };
+                stackLayout.Add(sectionTitle);
+            } else
+            {
+                Label sectionTitle = new Label
+                {
+                    Text = "No deadline.",
                     TextColor = Color.FromHex("#C0C0C0"),
                     FontSize = 20,
                     Margin = new Thickness(5, 10, 0, 5)

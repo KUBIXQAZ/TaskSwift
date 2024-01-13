@@ -91,10 +91,10 @@ public partial class ProfilePage : ContentPage
 
         foreach (Task task in tasksWithDeadline)
         {
-            TimeSpan timeLeft = Date.GetTimeLeft(task.date.Value, now);
+            TimeSpan timeLeft = Date.GetTimeLeft(task.date, now);
             TimeSpan currTaskLeft = new TimeSpan();
 
-            try { currTaskLeft = Date.GetTimeLeft(currTask.date.Value, now); }
+            try { currTaskLeft = Date.GetTimeLeft(currTask.date, now); }
             catch (Exception ex) { }
 
             if (currTask == null || timeLeft < currTaskLeft)

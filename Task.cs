@@ -7,7 +7,7 @@ namespace TaskSwift.Views
     public class Task
     {
         public string title { set; get; }
-        public DateTime? date { set; get; }
+        public DateTime date { set; get; }
         public bool withDeadline { set; get; }
         public FlagModel flag { set; get; }
 
@@ -20,7 +20,7 @@ namespace TaskSwift.Views
             {
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
-                BorderColor = task.flag.Color == null ? Colors.Transparent : task.flag.Color,
+                BorderColor = task.flag == null ? Colors.Transparent : task.flag.Color,
                 Margin = new Thickness(8, 3, 8, 0),
                 HeightRequest = 50,
                 Padding = 0
@@ -81,7 +81,7 @@ namespace TaskSwift.Views
             {
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
-                BorderColor = task.flag.Color == null ? Colors.Transparent : task.flag.Color,
+                BorderColor = task.flag == null ? Colors.Transparent : task.flag.Color,
                 Margin = new Thickness(8, 3, 8, 0),
                 HeightRequest = 78,
                 Padding = 0
@@ -146,7 +146,7 @@ namespace TaskSwift.Views
             {
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
-                BorderColor = task.flag.Color == null ? Colors.Transparent : task.flag.Color.WithAlpha(20).WithSaturation(20),
+                BorderColor = task.flag == null ? Colors.Transparent : task.flag.Color.WithAlpha(20).WithSaturation(20),
                 Margin = new Thickness(8, 3, 8, 0),
                 HeightRequest = 50,
                 Padding = 0
@@ -191,11 +191,11 @@ namespace TaskSwift.Views
 
         public static Frame DisplayTasks(Task task)
         {
-            if (task.withDeadline) return GenerateElementWithDeadline(task, task.date.Value, task.title);
+            if (task.withDeadline) return GenerateElementWithDeadline(task, task.date, task.title);
             else return GenerateElementWithoutDeadline(task, task.title);
         }
 
-        public static Task createTask(string title, DateTime? date, bool withDeadline, FlagModel? flag)
+        public static Task createTask(string title, DateTime date, bool withDeadline, FlagModel flag)
         {
             Task task = new Task();
             task.date = date;

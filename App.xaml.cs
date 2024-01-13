@@ -42,7 +42,7 @@ public partial class App : Application
 
     private void ResetData()
     {
-        //File.Delete(tasksFilePath);
+        File.Delete(tasksFilePath);
         //File.Delete(statsFilePath);
         File.Delete(completedTasksPath);
         //File.Delete(flagsFilePath);

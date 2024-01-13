@@ -20,8 +20,8 @@ public partial class EditTaskPopup : Popup
             DeadlineCheckbox.IsChecked = true;
             TimeCheckbox.IsChecked = true;
 
-            TaskDate.Date = task.date.Value;
-            TaskTime.Time = task.date.Value.TimeOfDay;
+            TaskDate.Date = task.date;
+            TaskTime.Time = task.date.TimeOfDay;
         }
 
         DisplayFlags();
@@ -77,7 +77,7 @@ public partial class EditTaskPopup : Popup
 
         bool withDeadline = DeadlineCheckbox.IsChecked;
 
-        App.tasks[App.tasks.IndexOf(taskToEdit)] = Task.createTask(title, withDeadline ? combinedDateTime : null, withDeadline, selectedFlag);
+        App.tasks[App.tasks.IndexOf(taskToEdit)] = Task.createTask(title, withDeadline ? combinedDateTime : DateTime.MinValue, withDeadline, selectedFlag);
 
         Title.Text = string.Empty;
 

@@ -75,11 +75,11 @@ public partial class AddTaskPage : ContentPage
         }
     }
 
-    public void GenerateTask(bool withDeadline, string title, DateTime? date, FlagModel? flag)
+    public void GenerateTask(bool withDeadline, string title, DateTime date, FlagModel flag)
     {
         Task task;
 
-        task = Task.createTask(title, withDeadline ? date : null, withDeadline, flag);
+        task = Task.createTask(title, withDeadline ? date : DateTime.MinValue, withDeadline, flag);
 
         App.tasks.Add(task);
         Task.SaveTask();
@@ -99,7 +99,7 @@ public partial class AddTaskPage : ContentPage
 
         bool withDeadline = DeadlineCheckbox.IsChecked;
 
-        GenerateTask(withDeadline, title, withDeadline ? combinedDateTime : null, selectedFlag);
+        GenerateTask(withDeadline, title, withDeadline ? combinedDateTime : DateTime.MinValue, selectedFlag);
 
         Title.Text = string.Empty;
 
