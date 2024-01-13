@@ -50,6 +50,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\Images\gear.svg" />
 	  <None Remove="Resources\Images\gear_white.svg" />
+	  <None Remove="Resources\Images\minus.svg" />
 	  <None Remove="Resources\Images\plus.svg" />
 	</ItemGroup>
 
@@ -64,6 +65,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CreateFlagPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DeleteFlagPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditTaskPopup.xaml">

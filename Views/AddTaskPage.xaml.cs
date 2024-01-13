@@ -47,7 +47,7 @@ public partial class AddTaskPage : ContentPage
 
     Frame selectedFlagFrame = null;
     FlagModel selectedFlag = null;
-    private void DisplayFlags()
+    public void DisplayFlags()
     {
         FlagsHorizontalStackLayout.Clear();
 
@@ -101,6 +101,35 @@ public partial class AddTaskPage : ContentPage
         frame.Content = image;
 
         FlagsHorizontalStackLayout.Add(frame);
+
+        Frame frame2 = new Frame
+        {
+            BackgroundColor = Colors.Transparent,
+            BorderColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Start,
+            Padding = new Thickness(12, 12, 12, 12),
+            VerticalOptions = LayoutOptions.Start,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+
+        TapGestureRecognizer tapGestureRecognizer2 = new TapGestureRecognizer();
+        tapGestureRecognizer2.Tapped += async (s, e) =>
+        {
+            DeleteFlagPopup deleteFlagPopup = new DeleteFlagPopup();
+            await this.ShowPopupAsync(deleteFlagPopup);
+            DisplayFlags();
+        };
+
+        frame2.GestureRecognizers.Add(tapGestureRecognizer2);
+
+        Image image2 = new Image
+        {
+            Source = ImageSource.FromFile("minus.svg")
+        };
+
+        frame2.Content = image2;
+
+        FlagsHorizontalStackLayout.Add(frame2);
     }
 
     public void GenerateTask(bool withDeadline, string title, DateTime date, FlagModel flag)

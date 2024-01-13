@@ -82,6 +82,34 @@ public partial class MainPage : ContentPage
         frame.Content = image;
 
         FlagsHorizontalStackLayout.Add(frame);
+
+        Frame frame2 = new Frame
+        {
+            BackgroundColor = Colors.Transparent,
+            BorderColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Start,
+            Padding = new Thickness(12, 12, 12, 12),
+            VerticalOptions = LayoutOptions.Start,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+
+        TapGestureRecognizer tapGestureRecognizer2 = new TapGestureRecognizer();
+        tapGestureRecognizer2.Tapped += async (s, e) =>
+        {
+            DeleteFlagPopup deleteFlagPopup = new DeleteFlagPopup();
+            await this.ShowPopupAsync(deleteFlagPopup);
+        };
+
+        frame2.GestureRecognizers.Add(tapGestureRecognizer2);
+
+        Image image2 = new Image
+        {
+            Source = ImageSource.FromFile("minus.svg")
+        };
+
+        frame2.Content = image2;
+
+        FlagsHorizontalStackLayout.Add(frame2);
     }
 
     public static void DisplayWhenNoTasks()

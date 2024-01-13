@@ -106,6 +106,34 @@ public partial class EditTaskPopup : Popup
         frame2.Content = image;
 
         FlagsHorizontalStackLayout.Add(frame2);
+
+        Frame frame3 = new Frame
+        {
+            BackgroundColor = Colors.Transparent,
+            BorderColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Start,
+            Padding = new Thickness(12, 12, 12, 12),
+            VerticalOptions = LayoutOptions.Start,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+
+        TapGestureRecognizer tapGestureRecognizer2 = new TapGestureRecognizer();
+        tapGestureRecognizer2.Tapped += async (s, e) =>
+        {
+            DeleteFlagPopup deleteFlagPopup = new DeleteFlagPopup();
+            if (Shell.Current.CurrentPage is MainPage mainPage) await mainPage.ShowPopupAsync(deleteFlagPopup);
+            DisplayFlags();
+        };
+        frame3.GestureRecognizers.Add(tapGestureRecognizer2);
+
+        Image image2 = new Image
+        {
+            Source = ImageSource.FromFile("minus.svg")
+        };
+
+        frame3.Content = image2;
+
+        FlagsHorizontalStackLayout.Add(frame3);
     }
 
     public void AddTaskButton(object sender, EventArgs e)

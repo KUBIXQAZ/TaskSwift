@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskSwift.Views.DeleteFlagPopup"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui">
+    <ScrollView BackgroundColor="#121212" WidthRequest="300" Padding="20">
+        <VerticalStackLayout>
+            <VerticalStackLayout x:Name="flagsVerticalStackLayout">
+
+            </VerticalStackLayout>
+            <Button Text="Back"
+                    BackgroundColor="#4D4D4D"
+                    TextColor="#a6a6a6"
+                    Margin="20,10,20,0"
+                    FontSize="22"
+                    Clicked="CloseButton_Clicked"></Button>
+        </VerticalStackLayout>
+    </ScrollView>
+</mct:Popup>

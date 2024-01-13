@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using System.Xml;
 using TaskSwift.Models;
 
 namespace TaskSwift.Views;
@@ -11,10 +12,12 @@ public partial class CreateFlagPopup : Popup
 	public CreateFlagPopup()
 	{
 		InitializeComponent();
-
+		Frame selectedFrame = null;
         EventHandler<TappedEventArgs> eventHandler = (s, e) => {
-			Frame frame = (Frame)s;
-			color = frame.BackgroundColor;
+			if(selectedFrame != null) selectedFrame.BorderColor = Colors.Transparent;
+            selectedFrame = (Frame)s;
+            selectedFrame.BorderColor = Colors.White;
+			color = selectedFrame.BackgroundColor;
         };
 
         foreach (Frame frame in colorsHorizontalStackLayout.Children)
