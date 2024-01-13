@@ -6,8 +6,10 @@ namespace TaskSwift.Views;
 public partial class EditTaskPopup : Popup
 {
     Task taskToEdit;
-
-	public EditTaskPopup(Task task)
+    Frame selectedFlagFrame = null;
+    FlagModel selectedFlag = null;
+    EventHandler<TappedEventArgs> eventHandler;
+    public EditTaskPopup(Task task)
 	{
 		InitializeComponent();
 
@@ -23,6 +25,7 @@ public partial class EditTaskPopup : Popup
             TaskDate.Date = task.date;
             TaskTime.Time = task.date.TimeOfDay;
         }
+        
 
         DisplayFlags();
     }
@@ -32,15 +35,13 @@ public partial class EditTaskPopup : Popup
 		Close();
     }
 
-    Frame selectedFlagFrame = null;
-    FlagModel selectedFlag = null;
     private void DisplayFlags()
     {
         FlagsHorizontalStackLayout.Clear();
 
         foreach (FlagModel flag in App.flags)
         {
-            EventHandler<TappedEventArgs> eventHandler = (sender, e) =>
+            eventHandler = (sender, e) =>
             {
                 if (selectedFlagFrame != null || (Frame)sender == selectedFlagFrame)
                 {
@@ -60,6 +61,23 @@ public partial class EditTaskPopup : Popup
             };
 
             FlagsHorizontalStackLayout.Add(FlagModel.FlagUI(flag.Color, flag.Name, eventHandler));
+        }
+
+        foreach (Frame frame in FlagsHorizontalStackLayout.Children)
+        {
+            if (frame.Content is Label label)
+            {
+                if (taskToEdit.flag != null)
+                {
+                    if (label.Text.Equals(taskToEdit.flag.Name) && frame.BorderColor.Equals(taskToEdit.flag.Color))
+                    {
+                        selectedFlagFrame = frame;
+                        selectedFlag = taskToEdit.flag;
+
+                        selectedFlagFrame.Background = selectedFlag.Color;
+                    }
+                }
+            }
         }
     }
 

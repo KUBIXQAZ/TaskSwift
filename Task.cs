@@ -21,7 +21,7 @@ namespace TaskSwift.Views
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
                 BorderColor = task.flag == null ? Colors.Transparent : task.flag.Color,
-                Margin = new Thickness(8, 3, 8, 0),
+                Margin = new Thickness(8, 5, 8, 0),
                 HeightRequest = 50,
                 Padding = 0
             };
@@ -82,7 +82,7 @@ namespace TaskSwift.Views
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
                 BorderColor = task.flag == null ? Colors.Transparent : task.flag.Color,
-                Margin = new Thickness(8, 3, 8, 0),
+                Margin = new Thickness(8, 5, 8, 0),
                 HeightRequest = 78,
                 Padding = 0
             };
