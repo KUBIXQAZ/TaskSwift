@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskSwift.Views.CreateFlagPopup"
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui">
+    <Grid BackgroundColor="#121212" RowDefinitions="auto,auto,auto,auto,auto,auto" WidthRequest="300" Padding="20">
+        <Label Text="Name:" Grid.Row="0"></Label>
+        <Entry Grid.Row="1" x:Name="flagName"
+               TextChanged="flagName_TextChanged"></Entry>
+        <Label Text="Color:" Grid.Row="2"></Label>
+        <HorizontalStackLayout Grid.Row="3"
+                               HorizontalOptions="Center"
+                               x:Name="colorsHorizontalStackLayout">
+            <Frame CornerRadius="80" HeightRequest="40" WidthRequest="40" BackgroundColor="blue"></Frame>
+            <Frame CornerRadius="80" HeightRequest="40" WidthRequest="40" BackgroundColor="red"></Frame>
+            <Frame CornerRadius="80" HeightRequest="40" WidthRequest="40" BackgroundColor="green"></Frame>
+            <Frame CornerRadius="80" HeightRequest="40" WidthRequest="40" BackgroundColor="orange"></Frame>
+            <Frame CornerRadius="80" HeightRequest="40" WidthRequest="40" BackgroundColor="purple"></Frame>
+            <Frame CornerRadius="80" HeightRequest="40" WidthRequest="40" BackgroundColor="yellow"></Frame>
+        </HorizontalStackLayout>
+        <Button Text="Cancel"
+                Grid.Row="4"
+                    BackgroundColor="#4D4D4D"
+                    TextColor="#a6a6a6"
+                Clicked="CancelButton_Clicked"
+                    Margin="20,10,20,0"
+                    FontSize="22"></Button>
+        <Button Text="Create"
+                Grid.Row="5"
+                    BackgroundColor="#4D4D4D"
+                    TextColor="#a6a6a6"
+                    Margin="20,10,20,0"
+                Clicked="SubmitButton_Clicked"
+                    FontSize="22"
+                x:Name="submitB"
+                    IsEnabled="False"></Button>
+    </Grid>
+</mct:Popup>

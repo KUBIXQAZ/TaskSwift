@@ -79,6 +79,33 @@ public partial class EditTaskPopup : Popup
                 }
             }
         }
+        Frame frame2 = new Frame
+        {
+            BackgroundColor = Colors.Transparent,
+            BorderColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Start,
+            Padding = new Thickness(12, 12, 12, 12),
+            VerticalOptions = LayoutOptions.Start,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+
+        TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+        tapGestureRecognizer.Tapped += async (s, e) =>
+        {
+            CreateFlagPopup createFlagPopup = new CreateFlagPopup();
+            if(Shell.Current.CurrentPage is MainPage mainPage) await mainPage.ShowPopupAsync(createFlagPopup);
+            DisplayFlags();
+        };
+        frame2.GestureRecognizers.Add(tapGestureRecognizer);
+
+        Image image = new Image
+        {
+            Source = ImageSource.FromFile("plus.svg")
+        };
+
+        frame2.Content = image;
+
+        FlagsHorizontalStackLayout.Add(frame2);
     }
 
     public void AddTaskButton(object sender, EventArgs e)

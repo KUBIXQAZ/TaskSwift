@@ -1,3 +1,6 @@
+using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Controls;
+using System;
 using TaskSwift.Models;
 
 namespace TaskSwift.Views;
@@ -52,6 +55,33 @@ public partial class MainPage : ContentPage
 
             FlagsHorizontalStackLayout.Add(FlagModel.FlagUI(flag.Color, flag.Name, eventHandler));
         }
+
+        Frame frame = new Frame
+        {
+            BackgroundColor = Colors.Transparent,
+            BorderColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Start,
+            Padding = new Thickness(12, 12, 12, 12),
+            VerticalOptions = LayoutOptions.Start,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+
+        TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+        tapGestureRecognizer.Tapped += async (s,e)=>
+        {
+            CreateFlagPopup createFlagPopup = new CreateFlagPopup();
+            await this.ShowPopupAsync(createFlagPopup);
+        };
+        frame.GestureRecognizers.Add(tapGestureRecognizer);
+
+        Image image = new Image
+        {
+            Source = ImageSource.FromFile("plus.svg")
+        };
+
+        frame.Content = image;
+
+        FlagsHorizontalStackLayout.Add(frame);
     }
 
     public static void DisplayWhenNoTasks()
