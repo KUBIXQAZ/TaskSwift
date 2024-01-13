@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using TaskSwift.Models;
 
 namespace TaskSwift.Views;
 
@@ -22,11 +23,44 @@ public partial class EditTaskPopup : Popup
             TaskDate.Date = task.date.Value;
             TaskTime.Time = task.date.Value.TimeOfDay;
         }
+
+        DisplayFlags();
     }
 
     private void CancelButton_Clicked(object sender, EventArgs e)
     {
 		Close();
+    }
+
+    Frame selectedFlagFrame = null;
+    FlagModel selectedFlag = null;
+    private void DisplayFlags()
+    {
+        FlagsHorizontalStackLayout.Clear();
+
+        foreach (FlagModel flag in App.flags)
+        {
+            EventHandler<TappedEventArgs> eventHandler = (sender, e) =>
+            {
+                if (selectedFlagFrame != null || (Frame)sender == selectedFlagFrame)
+                {
+                    selectedFlagFrame.Background = Colors.Transparent;
+                }
+                if ((Frame)sender != selectedFlagFrame)
+                {
+                    selectedFlagFrame = (Frame)sender;
+                    selectedFlag = flag;
+                    selectedFlagFrame.Background = flag.Color;
+                }
+                else
+                {
+                    selectedFlagFrame = null;
+                    selectedFlag = null;
+                }
+            };
+
+            FlagsHorizontalStackLayout.Add(FlagModel.FlagUI(flag.Color, flag.Name, eventHandler));
+        }
     }
 
     public void AddTaskButton(object sender, EventArgs e)
@@ -43,15 +77,7 @@ public partial class EditTaskPopup : Popup
 
         bool withDeadline = DeadlineCheckbox.IsChecked;
 
-
-        if (withDeadline)
-        {
-            App.tasks[App.tasks.IndexOf(taskToEdit)] = Task.createTask(title, combinedDateTime, withDeadline);
-        }
-        else
-        {
-            App.tasks[App.tasks.IndexOf(taskToEdit)] = Task.createTask(title, null, withDeadline);
-        }
+        App.tasks[App.tasks.IndexOf(taskToEdit)] = Task.createTask(title, withDeadline ? combinedDateTime : null, withDeadline, selectedFlag);
 
         Title.Text = string.Empty;
 

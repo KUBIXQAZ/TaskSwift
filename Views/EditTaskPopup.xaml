@@ -16,6 +16,12 @@
                    Placeholder="math test"
                    x:Name="Title"
                    TextChanged="CheckEntry"></Entry>
+            <ScrollView Margin="0,5,0,0"
+                        Orientation="Horizontal">
+                <HorizontalStackLayout Padding="10,0,0,0"
+                                   x:Name="FlagsHorizontalStackLayout">
+                </HorizontalStackLayout>
+            </ScrollView>
             <FlexLayout Margin="20,0,20,0">
                 <CheckBox CheckedChanged="DeadlineCheckbox_CheckedChanged" 
                           x:Name="DeadlineCheckbox"

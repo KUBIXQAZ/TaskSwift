@@ -11,7 +11,7 @@ public class MainActivity : MauiAppCompatActivity
     protected override void OnCreate(Bundle savedInstanceState)
     {
         Window.SetStatusBarColor(Color.FromHex("#121212").ToAndroid());
-        Window.SetNavigationBarColor(Color.FromHex("#1c1c1c").ToAndroid());
+        Window.SetNavigationBarColor(Color.FromHex("#121212").ToAndroid());
 
         base.OnCreate(savedInstanceState);
     }

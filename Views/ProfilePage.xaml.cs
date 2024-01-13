@@ -1,3 +1,5 @@
+using Microsoft.Maui.Controls;
+
 namespace TaskSwift.Views;
 
 public partial class ProfilePage : ContentPage
@@ -12,7 +14,9 @@ public partial class ProfilePage : ContentPage
         base.OnAppearing();
 
         DisplayStats();
+
         displayCurrent();
+        DisplayDoneTasks();
     }
 
     public void DisplayStats()
@@ -21,6 +25,30 @@ public partial class ProfilePage : ContentPage
         doneOverdueText.Text = App.stats.tasksDoneOverdue.ToString();
         pendingText.Text = App.stats.tasksPending.ToString();
     }
+
+    public void DisplayDoneTasks()
+    {
+        StackLayoutDoneTasks.Clear();
+        if (App.completedTasks.Count != 0)
+        {
+            Label sectionTitle = new Label
+            {
+                Text = "Completed Tasks",
+                TextColor = Color.FromHex("#C0C0C0"),
+                FontSize = 20,
+                Margin = new Thickness(5, 10, 0, 5)
+            };
+            StackLayoutDoneTasks.Add(sectionTitle);
+
+            foreach(Task task in App.completedTasks)
+            {
+                Frame frame = Task.GenerateCompletedTask(task);
+
+                StackLayoutDoneTasks.Add(frame);
+            }
+        }
+    }
+
 
     LinearGradientBrush gradient = new LinearGradientBrush
     {
@@ -34,9 +62,7 @@ public partial class ProfilePage : ContentPage
     int max = 3;
     public void displayCurrent()
     {
-        StackLayoutCurrTask.Children.Clear();
-        currectTaskText.Children.Clear();
-
+        StackLayoutCurrTasks.Clear();
         List<Task> tasksWithDeadline = tasksWithDeadline = new List<Task>();
         for (int i = 0; i < App.tasks.Count; i++)
         {
@@ -57,10 +83,10 @@ public partial class ProfilePage : ContentPage
                 Text = "Current Task",
                 TextColor = Color.FromHex("#C0C0C0"),
                 FontSize = 20,
-                Margin = new Thickness(0, 10, 0, 5)
+                Margin = new Thickness(5, 10, 0, 5)
             };
 
-            currectTaskText.Children.Add(sectionTitle);
+            StackLayoutCurrTasks.Children.Add(sectionTitle);
         }
 
         foreach (Task task in tasksWithDeadline)
@@ -96,7 +122,7 @@ public partial class ProfilePage : ContentPage
         {
             if (taskNum >= max) break;
 
-            StackLayoutCurrTask.Children.Add(Task.DisplayTasks(task));
+            StackLayoutCurrTasks.Children.Add(Task.DisplayTasks(task));
             taskNum++;
         }
 
@@ -150,7 +176,7 @@ public partial class ProfilePage : ContentPage
             if (currTasks.Count > taskNum) stackLayout.Children.Add(displayMoreButton);
             else if (currTasks.Count == taskNum) stackLayout.Children.Remove(displayMoreButton);
 
-            StackLayoutCurrTask.Children.Add(stackLayout);
+            StackLayoutCurrTasks.Children.Add(stackLayout);
         }
     }
 }

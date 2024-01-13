@@ -2,9 +2,20 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskSwift.Views.MainPage">
-    <ScrollView BackgroundColor="#121212">
-        <StackLayout x:Name="TasksContainer" 
+    <Grid RowDefinitions="50,*" 
+          BackgroundColor="#121212">
+        <ScrollView Grid.Row="0"
+                    Margin="0,5,0,0"
+                    Orientation="Horizontal">
+            <HorizontalStackLayout Padding="10,0,0,0"
+                                   x:Name="FlagsHorizontalStackLayout">
+            </HorizontalStackLayout>
+        </ScrollView>
+        <ScrollView Grid.Row="1">
+            <StackLayout x:Name="TasksContainer" 
                      Padding="0,10,0,0">
-        </StackLayout>
-    </ScrollView>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
 </ContentPage>

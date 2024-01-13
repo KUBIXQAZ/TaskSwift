@@ -1,3 +1,5 @@
+using TaskSwift.Models;
+
 namespace TaskSwift.Views;
 
 public partial class AddTaskPage : ContentPage
@@ -23,7 +25,7 @@ public partial class AddTaskPage : ContentPage
 
         Title.Text = string.Empty;
 
-        Device.StartTimer(TimeSpan.FromMilliseconds(1), () =>
+        Dispatcher.StartTimer(TimeSpan.FromMilliseconds(1), () =>
         {
             DateTime taskDate = TaskDate.Date;
             DateTime currDate = DateTime.Now.Date;
@@ -38,20 +40,46 @@ public partial class AddTaskPage : ContentPage
             }
             return true;
         });
+
+        DisplayFlags();
     }
 
-    public void GenerateTask(bool withDeadline, string title, DateTime? date)
+    Frame selectedFlagFrame = null;
+    FlagModel selectedFlag = null;
+    private void DisplayFlags()
+    {
+        FlagsHorizontalStackLayout.Clear();
+
+        foreach (FlagModel flag in App.flags)
+        {
+            EventHandler<TappedEventArgs> eventHandler = (sender, e) =>
+            {
+                if(selectedFlagFrame != null || (Frame)sender == selectedFlagFrame)
+                {
+                    selectedFlagFrame.Background = Colors.Transparent;
+                }
+                if ((Frame)sender != selectedFlagFrame)
+                {
+                    selectedFlagFrame = (Frame)sender;
+                    selectedFlag = flag;
+                    selectedFlagFrame.Background = flag.Color;
+                }
+                else
+                {
+                    selectedFlagFrame = null;
+                    selectedFlag = null;
+                }
+            };
+            
+            FlagsHorizontalStackLayout.Add(FlagModel.FlagUI(flag.Color, flag.Name, eventHandler));
+        }
+    }
+
+    public void GenerateTask(bool withDeadline, string title, DateTime? date, FlagModel? flag)
     {
         Task task;
 
-        if (withDeadline)
-        {
-            task = Task.createTask(title, date, withDeadline);
-        }
-        else
-        {
-            task = Task.createTask(title, null, withDeadline);
-        }
+        task = Task.createTask(title, withDeadline ? date : null, withDeadline, flag);
 
         App.tasks.Add(task);
         Task.SaveTask();
@@ -71,7 +99,7 @@ public partial class AddTaskPage : ContentPage
 
         bool withDeadline = DeadlineCheckbox.IsChecked;
 
-        GenerateTask(withDeadline, title, combinedDateTime);
+        GenerateTask(withDeadline, title, withDeadline ? combinedDateTime : null, selectedFlag);
 
         Title.Text = string.Empty;
 

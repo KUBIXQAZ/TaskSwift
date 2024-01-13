@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui.Views;
+using TaskSwift.Models;
 
 namespace TaskSwift.Views;
 
@@ -19,6 +19,38 @@ public partial class MainPage : ContentPage
 
         displayTasks();
         DisplayWhenNoTasks();
+        DisplayFlags();
+    }
+
+    Frame selectedFlagFrame = null;
+    FlagModel selectedFlag = null;
+    public void DisplayFlags()
+    {
+        FlagsHorizontalStackLayout.Clear();
+
+        foreach (FlagModel flag in App.flags)
+        {
+            EventHandler<TappedEventArgs> eventHandler = (sender, e) =>
+            {
+                if (selectedFlagFrame != null || (Frame)sender == selectedFlagFrame)
+                {
+                    selectedFlagFrame.Background = Colors.Transparent;
+                }
+                if ((Frame)sender != selectedFlagFrame)
+                {
+                    selectedFlagFrame = (Frame)sender;
+                    selectedFlag = flag;
+                    selectedFlagFrame.Background = flag.Color;
+                }
+                else
+                {
+                    selectedFlagFrame = null;
+                    selectedFlag = null;
+                }
+            };
+
+            FlagsHorizontalStackLayout.Add(FlagModel.FlagUI(flag.Color, flag.Name, eventHandler));
+        }
     }
 
     public static void DisplayWhenNoTasks()
@@ -77,15 +109,37 @@ public partial class MainPage : ContentPage
     {
         tasksContainer.Children.Clear();
 
-        int tasksCount = App.tasks.Count;
-
         StackLayout stackLayout = new StackLayout();
 
-        for (int i = 0; i < tasksCount; i++)
-        {
-            Task task = App.tasks[i];
+        List<Task> tasks = App.tasks;
+        var groupedTasks = tasks.GroupBy(task => task.date?.Date);
 
-            stackLayout.Add(Task.DisplayTasks(task));
+        foreach (var taskGroup in groupedTasks)
+        {
+            DateTime? groupDate = taskGroup.Key;
+
+            if (groupDate.HasValue)
+            {
+                string title = null;
+                var daysLeft = Date.GetDayLeft(groupDate.Value);
+                if (daysLeft < 0) title = "Overdue.";
+                else if (daysLeft == 0) title = "Today.";
+                else title = $"{daysLeft} Days left.";
+
+                Label sectionTitle = new Label
+                {
+                    Text = title,
+                    TextColor = Color.FromHex("#C0C0C0"),
+                    FontSize = 20,
+                    Margin = new Thickness(5, 10, 0, 5)
+                };
+                stackLayout.Add(sectionTitle);
+            }
+
+            foreach (var task in taskGroup)
+            {
+                stackLayout.Add(Task.DisplayTasks(task));
+            }
         }
 
         tasksContainer.Children.Add(stackLayout);

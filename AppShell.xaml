@@ -8,7 +8,7 @@
     <Shell.Resources>
         <ResourceDictionary>
             <Style TargetType="TabBar">
-                <Setter Property="Shell.TabBarBackgroundColor" Value="#1c1c1c"/>
+                <Setter Property="Shell.TabBarBackgroundColor" Value="#121212"/>
                 <Setter Property="Shell.TabBarTitleColor" Value="#66B4FF" />
                 <Setter Property="Shell.TabBarUnselectedColor" Value="gray" />
             </Style>

@@ -8,6 +8,12 @@
             return currDate;
         }
 
+        public static int GetDayLeft(DateTime datetime)
+        {
+            TimeSpan daysLeft = datetime - DateTime.Now;
+            return daysLeft.Days;
+        }
+
         public static string GetDaysLeft(DateTime taskDate)
         {
             TimeSpan daysLeft = taskDate - DateTime.Now;

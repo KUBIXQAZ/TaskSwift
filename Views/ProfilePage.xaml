@@ -48,13 +48,9 @@
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
                 </Frame>
-                <StackLayout x:Name="currectTaskText">
-                    <!--<Label Text="Current Task"
-                   TextColor="#C0C0C0"
-                   FontSize="20"
-                   Margin="0,10,0,5"></Label>-->
-                </StackLayout>
-                <StackLayout x:Name="StackLayoutCurrTask"
+                <StackLayout x:Name="StackLayoutCurrTasks"
+                         Padding="-8, 0, -8, 0"></StackLayout>
+                <StackLayout x:Name="StackLayoutDoneTasks"
                          Padding="-8, 0, -8, 0"></StackLayout>
             </VerticalStackLayout>
         </ScrollView>

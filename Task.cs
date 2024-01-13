@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Views;
 using Newtonsoft.Json;
+using TaskSwift.Models;
 
 namespace TaskSwift.Views
 {
@@ -8,6 +9,7 @@ namespace TaskSwift.Views
         public string title { set; get; }
         public DateTime? date { set; get; }
         public bool withDeadline { set; get; }
+        public FlagModel flag { set; get; }
 
         public static Frame GenerateElementWithoutDeadline(Task task, string title)
         {
@@ -18,7 +20,7 @@ namespace TaskSwift.Views
             {
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
-                BorderColor = Colors.Transparent,
+                BorderColor = task.flag.Color == null ? Colors.Transparent : task.flag.Color,
                 Margin = new Thickness(8, 3, 8, 0),
                 HeightRequest = 50,
                 Padding = 0
@@ -79,7 +81,7 @@ namespace TaskSwift.Views
             {
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
-                BorderColor = Colors.Transparent,
+                BorderColor = task.flag.Color == null ? Colors.Transparent : task.flag.Color,
                 Margin = new Thickness(8, 3, 8, 0),
                 HeightRequest = 78,
                 Padding = 0
@@ -135,18 +137,71 @@ namespace TaskSwift.Views
             return frame;
         }
 
+        public static Frame GenerateCompletedTask(Task task)
+        {
+            Color bgColor = Color.FromRgb(59, 59, 59);
+            Color titleColor = Colors.Gray;
+
+            Frame frame = new Frame
+            {
+                BackgroundColor = bgColor,
+                CornerRadius = 15,
+                BorderColor = task.flag.Color == null ? Colors.Transparent : task.flag.Color.WithAlpha(20).WithSaturation(20),
+                Margin = new Thickness(8, 3, 8, 0),
+                HeightRequest = 50,
+                Padding = 0
+            };
+
+            Grid grid = new Grid
+            {
+                Padding = new Thickness(5, 0, 5, 0)
+            };
+            grid.AddColumnDefinition(new ColumnDefinition { Width = 50 });
+            grid.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
+
+            RadioButton radioButton = new RadioButton
+            {
+                IsEnabled = false,
+            };
+
+            if (task.title.Length > 29) task.title = task.title.Substring(0, 29) + "...";
+
+            Label titleLabel = new Label
+            {
+                VerticalOptions = LayoutOptions.Center,
+                Text = task.title,
+                TextColor = titleColor,
+                FontSize = 20
+            };
+
+            grid.Add(radioButton, 0);
+            grid.Add(titleLabel, 1);
+
+            frame.Content = grid;
+
+            return frame;
+        }
+
+        public static void SaveCompletedTasks()
+        {
+            string json = JsonConvert.SerializeObject(App.completedTasks);
+
+            File.WriteAllText(App.completedTasksPath, json);
+        }
+
         public static Frame DisplayTasks(Task task)
         {
             if (task.withDeadline) return GenerateElementWithDeadline(task, task.date.Value, task.title);
             else return GenerateElementWithoutDeadline(task, task.title);
         }
 
-        public static Task createTask(string title, DateTime? date, bool withDeadline)
+        public static Task createTask(string title, DateTime? date, bool withDeadline, FlagModel? flag)
         {
             Task task = new Task();
             task.date = date;
             task.title = title;
             task.withDeadline = withDeadline;
+            task.flag = flag;
             return task;
         }
 
@@ -166,6 +221,9 @@ namespace TaskSwift.Views
 
         public static void destroy(Task task, DateTime? date)
         {
+            App.completedTasks.Add(task);
+            SaveCompletedTasks();
+
             App.tasks.Remove(task);
 
             SaveTask();
@@ -182,6 +240,7 @@ namespace TaskSwift.Views
             {
                 profilePage.DisplayStats();
                 profilePage.displayCurrent();
+                profilePage.DisplayDoneTasks();
             }
             else if (currentShellItem is MainPage mainPage)
             {
@@ -202,6 +261,7 @@ namespace TaskSwift.Views
             {
                 await profilePage.ShowPopupAsync(editTaskPopup);
                 profilePage.displayCurrent();
+                profilePage.DisplayDoneTasks();
             }
         }
     }
