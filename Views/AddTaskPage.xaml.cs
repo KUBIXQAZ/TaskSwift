@@ -164,6 +164,9 @@ public partial class AddTaskPage : ContentPage
 
         Task.SaveStats();
 
+        selectedFlagFrame = null;
+        selectedFlag = null;
+
         Shell.Current.GoToAsync("//MainPage");
     }
 
