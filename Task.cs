@@ -42,7 +42,7 @@ namespace TaskSwift.Views
             RadioButton radioButton = new RadioButton();
             radioButton.CheckedChanged += (sender, e) =>
             {
-                destroy(task, null);
+                destroy(task, DateTime.MinValue);
             };
 
             if (title.Length > 29) title = title.Substring(0, 29) + "...";
@@ -219,7 +219,7 @@ namespace TaskSwift.Views
             File.WriteAllText(App.statsFilePath, json);
         }
 
-        public static void destroy(Task task, DateTime? date)
+        public static void destroy(Task task, DateTime date)
         {
             App.completedTasks.Add(task);
             SaveCompletedTasks();
@@ -230,8 +230,12 @@ namespace TaskSwift.Views
 
             var currentShellItem = Shell.Current.CurrentPage;
 
-            if (date != null) if (Date.GetOverdue(date.Value)) App.stats.tasksDoneOverdue++;
+            if (date == DateTime.MinValue) App.stats.tasksDone++;
+            else
+            {
+                if (Date.GetOverdue(date.Date)) App.stats.tasksDoneOverdue++;
                 else App.stats.tasksDone++;
+            }
             App.stats.tasksPending = App.tasks.Count;
 
             SaveStats();
