@@ -12,7 +12,7 @@
                    PlaceholderColor="#444444"
                    Margin="20,0,20,0"
                    Placeholder="math test"
-                   x:Name="Title"
+                   x:Name="TitleEntry"
                    TextChanged="CheckEntry"></Entry>
             <ScrollView Margin="0,5,0,0"
                         Orientation="Horizontal">

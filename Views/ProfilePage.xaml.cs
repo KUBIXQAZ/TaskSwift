@@ -29,6 +29,9 @@ public partial class ProfilePage : ContentPage
     public void DisplayDoneTasks()
     {
         StackLayoutDoneTasks.Clear();
+        var completedTasks = new List<Task>(App.completedTasks);
+        completedTasks.Reverse();
+
         if (App.completedTasks.Count != 0)
         {
             Label sectionTitle = new Label
@@ -40,7 +43,7 @@ public partial class ProfilePage : ContentPage
             };
             StackLayoutDoneTasks.Add(sectionTitle);
 
-            foreach(Task task in App.completedTasks)
+            foreach(Task task in completedTasks)
             {
                 Frame frame = Task.GenerateCompletedTask(task);
 
@@ -95,7 +98,7 @@ public partial class ProfilePage : ContentPage
             TimeSpan currTaskLeft = new TimeSpan();
 
             try { currTaskLeft = Date.GetTimeLeft(currTask.date, now); }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             if (currTask == null || timeLeft < currTaskLeft)
             {

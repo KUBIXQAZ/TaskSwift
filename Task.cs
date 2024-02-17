@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Views;
 using Newtonsoft.Json;
+using System.Net.WebSockets;
 using TaskSwift.Models;
 
 namespace TaskSwift.Views
@@ -222,6 +223,11 @@ namespace TaskSwift.Views
         public static void destroy(Task task, DateTime date)
         {
             App.completedTasks.Add(task);
+
+            if (App.completedTasks.Count > 5)
+            {
+                App.completedTasks.RemoveAt(0);
+            }
             SaveCompletedTasks();
 
             App.tasks.Remove(task);

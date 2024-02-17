@@ -24,7 +24,7 @@ public partial class AddTaskPage : ContentPage
         DeadlineCheckbox_CheckedChanged(null,null);
         TimeCheckbox_CheckedChanged(null, null);
 
-        Title.Text = string.Empty;
+        TitleEntry.Text = string.Empty;
 
         Dispatcher.StartTimer(TimeSpan.FromMilliseconds(1), () =>
         {
@@ -144,7 +144,7 @@ public partial class AddTaskPage : ContentPage
 
     public void AddTaskButton(object sender, EventArgs e)
     {
-        string title = Title.Text;
+        string title = TitleEntry.Text;
 
         DateTime selectedDate = TaskDate.Date;
         TimeSpan selectedTime;
@@ -158,7 +158,7 @@ public partial class AddTaskPage : ContentPage
 
         GenerateTask(withDeadline, title, withDeadline ? combinedDateTime : DateTime.MinValue, selectedFlag);
 
-        Title.Text = string.Empty;
+        TitleEntry.Text = string.Empty;
 
         App.stats.tasksPending = App.tasks.Count;
 
@@ -179,7 +179,7 @@ public partial class AddTaskPage : ContentPage
     public void CheckEntry(object sender, EventArgs e)
     {
         int i = 0;
-        string title = Title.Text;
+        string title = TitleEntry.Text;
         Button submit = Submit;
         i = title.Replace(" ", "").Length;
 
