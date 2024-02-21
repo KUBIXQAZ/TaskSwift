@@ -5,11 +5,11 @@ namespace TaskSwift.Views;
 
 public partial class EditTaskPopup : Popup
 {
-    Task taskToEdit;
+    TaskModel taskToEdit;
     Frame selectedFlagFrame = null;
     FlagModel selectedFlag = null;
     EventHandler<TappedEventArgs> eventHandler;
-    public EditTaskPopup(Task task)
+    public EditTaskPopup(TaskModel task)
 	{
 		InitializeComponent();
 
@@ -150,14 +150,14 @@ public partial class EditTaskPopup : Popup
 
         bool withDeadline = DeadlineCheckbox.IsChecked;
 
-        App.tasks[App.tasks.IndexOf(taskToEdit)] = Task.createTask(title, withDeadline ? combinedDateTime : DateTime.MinValue, withDeadline, selectedFlag);
+        App.tasks[App.tasks.IndexOf(taskToEdit)] = TaskModel.createTask(title, withDeadline ? combinedDateTime : DateTime.MinValue, withDeadline, selectedFlag);
 
         Title.Text = string.Empty;
 
         App.stats.tasksPending = App.tasks.Count;
 
-        Task.SaveStats();
-        Task.SaveTask();
+        TaskModel.SaveStats();
+        TaskModel.SaveTask();
 
         Close();
     }

@@ -1,4 +1,4 @@
-﻿namespace TaskSwift
+﻿namespace TaskSwift.Utilities
 {
     internal class Date
     {
@@ -6,7 +6,7 @@
         {
             TimeSpan timeLeft = GetTimeLeftNow(taskDate);
 
-            if(isOverdue(taskDate)) return "Overdue.";
+            if (isOverdue(taskDate)) return "Overdue.";
             else if (timeLeft.Days == 0)
             {
                 if (timeLeft.Hours >= 1) return timeLeft.Hours + " H left.";

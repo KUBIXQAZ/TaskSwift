@@ -134,12 +134,12 @@ public partial class AddTaskPage : ContentPage
 
     public void GenerateTask(bool withDeadline, string title, DateTime date, FlagModel flag)
     {
-        Task task;
+        TaskModel task;
 
-        task = Task.createTask(title, withDeadline ? date : DateTime.MinValue, withDeadline, flag);
+        task = TaskModel.createTask(title, withDeadline ? date : DateTime.MinValue, withDeadline, flag);
 
         App.tasks.Add(task);
-        Task.SaveTask();
+        TaskModel.SaveTask();
     }
 
     public void AddTaskButton(object sender, EventArgs e)
@@ -162,7 +162,7 @@ public partial class AddTaskPage : ContentPage
 
         App.stats.tasksPending = App.tasks.Count;
 
-        Task.SaveStats();
+        TaskModel.SaveStats();
 
         selectedFlagFrame = null;
         selectedFlag = null;

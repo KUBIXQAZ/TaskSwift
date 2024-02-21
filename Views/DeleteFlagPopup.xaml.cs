@@ -29,14 +29,14 @@ public partial class DeleteFlagPopup : Popup
             TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.Tapped += (s, e) =>
             {
-                foreach (Task task in App.tasks)
+                foreach (TaskModel task in App.tasks)
                 {
                     if(task.flag != null)
                     {
                         if (task.flag.Name == flag.Name && task.flag.Color == flag.Color)
                         {
                             task.flag = null;
-                            Task.SaveTask();
+                            TaskModel.SaveTask();
                             if (Shell.Current.CurrentPage is MainPage mainPage) mainPage.displayTasks();
                         }
                     }

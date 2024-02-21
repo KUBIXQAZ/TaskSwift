@@ -1,4 +1,5 @@
 using Microsoft.Maui.Controls;
+using TaskSwift.Utilities;
 
 namespace TaskSwift.Views;
 
@@ -29,7 +30,7 @@ public partial class ProfilePage : ContentPage
     public void DisplayDoneTasks()
     {
         StackLayoutDoneTasks.Clear();
-        var completedTasks = new List<Task>(App.completedTasks);
+        var completedTasks = new List<TaskModel>(App.completedTasks);
         completedTasks.Reverse();
 
         if (App.completedTasks.Count != 0)
@@ -43,9 +44,9 @@ public partial class ProfilePage : ContentPage
             };
             StackLayoutDoneTasks.Add(sectionTitle);
 
-            foreach(Task task in completedTasks)
+            foreach(TaskModel task in completedTasks)
             {
-                Frame frame = Task.GenerateCompletedTask(task);
+                Frame frame = TaskModel.GenerateCompletedTask(task);
 
                 StackLayoutDoneTasks.Add(frame);
             }
@@ -66,7 +67,7 @@ public partial class ProfilePage : ContentPage
     public void displayCurrent()
     {
         StackLayoutCurrTasks.Clear();
-        List<Task> tasksWithDeadline = tasksWithDeadline = new List<Task>();
+        List<TaskModel> tasksWithDeadline = tasksWithDeadline = new List<TaskModel>();
         for (int i = 0; i < App.tasks.Count; i++)
         {
             if (App.tasks[i].withDeadline)
@@ -75,8 +76,8 @@ public partial class ProfilePage : ContentPage
             }
         }
 
-        List<Task> currTasks = new List<Task>();
-        Task currTask = null;
+        List<TaskModel> currTasks = new List<TaskModel>();
+        TaskModel currTask = null;
         DateTime now = DateTime.Now;
 
         if(App.tasks.Count != 0)
@@ -92,7 +93,7 @@ public partial class ProfilePage : ContentPage
             StackLayoutCurrTasks.Children.Add(sectionTitle);
         }
 
-        foreach (Task task in tasksWithDeadline)
+        foreach (TaskModel task in tasksWithDeadline)
         {
             TimeSpan timeLeft = Date.GetTimeLeft(task.date, now);
             TimeSpan currTaskLeft = new TimeSpan();
@@ -121,11 +122,11 @@ public partial class ProfilePage : ContentPage
         }
 
         int taskNum = 0;
-        foreach (Task task in currTasks)
+        foreach (TaskModel task in currTasks)
         {
             if (taskNum >= max) break;
 
-            StackLayoutCurrTasks.Children.Add(Task.DisplayTasks(task));
+            StackLayoutCurrTasks.Children.Add(TaskModel.DisplayTasks(task));
             taskNum++;
         }
 

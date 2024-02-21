@@ -6,8 +6,8 @@ namespace TaskSwift;
 
 public partial class App : Application
 {
-    public static List<Views.Task> tasks = new List<Views.Task>();
-    public static List<Views.Task> completedTasks = new List<Views.Task>();
+    public static List<Views.TaskModel> tasks = new List<Views.TaskModel>();
+    public static List<Views.TaskModel> completedTasks = new List<Views.TaskModel>();
 
     public static List<FlagModel> flags = new List<FlagModel>();
 
@@ -62,12 +62,12 @@ public partial class App : Application
         if (File.Exists(tasksFilePath))
         {
             string json = File.ReadAllText(tasksFilePath);
-            tasks = JsonConvert.DeserializeObject<List<Views.Task>>(json);
+            tasks = JsonConvert.DeserializeObject<List<Views.TaskModel>>(json);
         }
         if (File.Exists(completedTasksPath))
         {
             string json = File.ReadAllText(completedTasksPath);
-            completedTasks = JsonConvert.DeserializeObject<List<Views.Task>>(json);
+            completedTasks = JsonConvert.DeserializeObject<List<Views.TaskModel>>(json);
         }
     }
 }

@@ -1,17 +1,18 @@
 ﻿using CommunityToolkit.Maui.Views;
 using Newtonsoft.Json;
 using TaskSwift.Models;
+using TaskSwift.Utilities;
 
 namespace TaskSwift.Views
 {
-    public class Task
+    public class TaskModel
     {
         public string title { set; get; }
         public DateTime date { set; get; }
         public bool withDeadline { set; get; }
         public FlagModel flag { set; get; }
 
-        public static Frame GenerateElementWithoutDeadline(Task task, string title)
+        public static Frame GenerateElementWithoutDeadline(TaskModel task, string title)
         {
             Color bgColor = Color.FromRgb(77, 77, 77);
             Color titleColor = Colors.White;
@@ -63,7 +64,7 @@ namespace TaskSwift.Views
             return frame;
         }
 
-        public static Frame GenerateElementWithDeadline(Task task, DateTime date, string title)
+        public static Frame GenerateElementWithDeadline(TaskModel task, DateTime date, string title)
         {
             string daysLeft = Date.GetDaysLeft(date);
             Color color = Colors.White;
@@ -137,7 +138,7 @@ namespace TaskSwift.Views
             return frame;
         }
 
-        public static Frame GenerateCompletedTask(Task task)
+        public static Frame GenerateCompletedTask(TaskModel task)
         {
             Color bgColor = Color.FromRgb(59, 59, 59);
             Color titleColor = Colors.Gray;
@@ -189,15 +190,15 @@ namespace TaskSwift.Views
             File.WriteAllText(App.completedTasksPath, json);
         }
 
-        public static Frame DisplayTasks(Task task)
+        public static Frame DisplayTasks(TaskModel task)
         {
             if (task.withDeadline) return GenerateElementWithDeadline(task, task.date, task.title);
             else return GenerateElementWithoutDeadline(task, task.title);
         }
 
-        public static Task createTask(string title, DateTime date, bool withDeadline, FlagModel flag)
+        public static TaskModel createTask(string title, DateTime date, bool withDeadline, FlagModel flag)
         {
-            Task task = new Task();
+            TaskModel task = new TaskModel();
             task.date = date;
             task.title = title;
             task.withDeadline = withDeadline;
@@ -219,7 +220,7 @@ namespace TaskSwift.Views
             File.WriteAllText(App.statsFilePath, json);
         }
 
-        public static void destroy(Task task, DateTime date)
+        public static void destroy(TaskModel task, DateTime date)
         {
             App.completedTasks.Add(task);
 
@@ -259,7 +260,7 @@ namespace TaskSwift.Views
             MainPage.DisplayWhenNoTasks();
         }
 
-        public static async void ViewTask(object sender, EventArgs e, Task task)
+        public static async void ViewTask(object sender, EventArgs e, TaskModel task)
         {
             EditTaskPopup editTaskPopup = new EditTaskPopup(task);
             if (Shell.Current.CurrentPage is MainPage mainPage)

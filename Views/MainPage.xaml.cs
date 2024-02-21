@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using TaskSwift.Models;
+using TaskSwift.Utilities;
 
 namespace TaskSwift.Views;
 
@@ -165,11 +166,11 @@ public partial class MainPage : ContentPage
     {
         tasksContainer.Children.Clear();
 
-        List<Task> tasks = null;
+        List<TaskModel> tasks = null;
         if (selectedFlag != null)
         {
-            tasks = new List<Task>();
-            foreach (Task task in App.tasks)
+            tasks = new List<TaskModel>();
+            foreach (TaskModel task in App.tasks)
             {
                 if(task.flag != null) if (Equals(task.flag.Name, selectedFlag.Name) && Equals(task.flag.Color, selectedFlag.Color)) tasks.Add(task);
             }
@@ -224,7 +225,7 @@ public partial class MainPage : ContentPage
 
             foreach (var task in taskGroup)
             {
-                tasksContainer.Add(Task.DisplayTasks(task));
+                tasksContainer.Add(TaskModel.DisplayTasks(task));
             }
         }
     }
