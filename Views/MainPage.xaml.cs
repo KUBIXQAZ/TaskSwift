@@ -1,6 +1,4 @@
 using CommunityToolkit.Maui.Views;
-using Microsoft.Maui.Controls;
-using System;
 using TaskSwift.Models;
 
 namespace TaskSwift.Views;
@@ -16,20 +14,19 @@ public partial class MainPage : ContentPage
         tasksContainer = TasksContainer;
     }
 
-    protected override void OnAppearing()
+    private void ContentPage_Appearing(object sender, EventArgs e)
     {
-        base.OnAppearing();
-
         displayTasks();
         DisplayWhenNoTasks();
         DisplayFlags();
     }
 
-    Frame selectedFlagFrame = null;
     FlagModel selectedFlag = null;
     public void DisplayFlags()
     {
         FlagsHorizontalStackLayout.Clear();
+
+        Frame selectedFlagFrame = null;
 
         foreach (FlagModel flag in App.flags)
         {
@@ -168,8 +165,6 @@ public partial class MainPage : ContentPage
     {
         tasksContainer.Children.Clear();
 
-        StackLayout stackLayout = new StackLayout();
-
         List<Task> tasks = null;
         if (selectedFlag != null)
         {
@@ -181,47 +176,56 @@ public partial class MainPage : ContentPage
         }
         else tasks = App.tasks;
 
-        var orderTasks = tasks.OrderByDescending(task => task.date).Reverse();
-        var groupedTasks = orderTasks.GroupBy(task => task.date.Date);
+        DateTime time = DateTime.Now;
+
+        var groupedTasks = tasks.OrderBy(task =>
+        {
+            TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
+
+            if (timeLeft.TotalSeconds > 0) return 0;
+            else if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return 1;
+            else return 2;
+        })
+            .GroupBy(task =>
+            {
+                TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
+
+                if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);
+                else return task.date.Date;
+            });
 
         foreach (var taskGroup in groupedTasks)
         {
             DateTime groupDate = taskGroup.Key;
 
+            Label sectionTitle = new Label
+            {
+                TextColor = Color.FromHex("#C0C0C0"),
+                FontSize = 20,
+                Margin = new Thickness(5, 10, 0, 5)
+            };
+
             if (groupDate != DateTime.MinValue)
             {
                 string title = null;
-                var daysLeft = Date.GetDayLeft(groupDate);
-                if (daysLeft < 0) title = "Overdue.";
-                else if (daysLeft == 0) title = "Today.";
-                else title = $"{daysLeft} Days left.";
+                var timeLeft = Date.GetTimeLeft(groupDate, time);
 
-                Label sectionTitle = new Label
-                {
-                    Text = title,
-                    TextColor = Color.FromHex("#C0C0C0"),
-                    FontSize = 20,
-                    Margin = new Thickness(5, 10, 0, 5)
-                };
-                stackLayout.Add(sectionTitle);
+                if (timeLeft.TotalSeconds < 0) title = "Overdue.";
+                else if (timeLeft.Days == 0) title = "Today.";
+                else title = $"{timeLeft.Days} Days left.";
+
+                sectionTitle.Text = title;
             } else
             {
-                Label sectionTitle = new Label
-                {
-                    Text = "No deadline.",
-                    TextColor = Color.FromHex("#C0C0C0"),
-                    FontSize = 20,
-                    Margin = new Thickness(5, 10, 0, 5)
-                };
-                stackLayout.Add(sectionTitle);
+                sectionTitle.Text = "No deadline.";
             }
+
+            tasksContainer.Add(sectionTitle);
 
             foreach (var task in taskGroup)
             {
-                stackLayout.Add(Task.DisplayTasks(task));
+                tasksContainer.Add(Task.DisplayTasks(task));
             }
         }
-
-        tasksContainer.Children.Add(stackLayout);
     }
 }

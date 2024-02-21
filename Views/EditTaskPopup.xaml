@@ -22,25 +22,25 @@
                                    x:Name="FlagsHorizontalStackLayout">
                 </HorizontalStackLayout>
             </ScrollView>
-            <FlexLayout Margin="20,0,20,0">
+            <HorizontalStackLayout Margin="20,0,20,0">
                 <CheckBox CheckedChanged="DeadlineCheckbox_CheckedChanged" 
                           x:Name="DeadlineCheckbox"
                           Color="#66B4FF"></CheckBox>
                 <Label Text="Set deadline."
                        TextColor="#a6a6a6"
-                       VerticalTextAlignment="Center"></Label>
-            </FlexLayout>
+                       VerticalOptions="Center"></Label>
+            </HorizontalStackLayout>
             <DatePicker TextColor="#a6a6a6"
                         Margin="20,0,20,0"
                         x:Name="TaskDate"></DatePicker>
-            <FlexLayout Margin="20,0,20,0">
+            <HorizontalStackLayout Margin="20,0,20,0">
                 <CheckBox CheckedChanged="TimeCheckbox_CheckedChanged"
                           x:Name="TimeCheckbox"
                           Color="#66B4FF"></CheckBox>
                 <Label Text="Time."
                        TextColor="#a6a6a6"
-                       VerticalTextAlignment="Center"></Label>
-            </FlexLayout>
+                       VerticalOptions="Center"></Label>
+            </HorizontalStackLayout>
             <TimePicker TextColor="#a6a6a6"
                         Margin="20,0,20,0"
                         x:Name="TaskTime"></TimePicker>

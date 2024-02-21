@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TaskSwift.Views.MainPage">
+             x:Class="TaskSwift.Views.MainPage"
+             Appearing="ContentPage_Appearing">
     <Grid RowDefinitions="50,*" 
           BackgroundColor="#121212">
         <ScrollView Grid.Row="0"
@@ -13,9 +14,8 @@
         </ScrollView>
         <ScrollView Grid.Row="1">
             <StackLayout x:Name="TasksContainer" 
-                     Padding="0,10,0,0">
+                         Padding="0,10,0,0">
             </StackLayout>
         </ScrollView>
     </Grid>
-
 </ContentPage>
