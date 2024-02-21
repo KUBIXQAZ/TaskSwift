@@ -2,33 +2,18 @@
 {
     internal class Date
     {
-        public static DateTime GetDate()
-        {
-            DateTime currDate = DateTime.Now;
-            return currDate;
-        }
-
-        public static int GetDayLeft(DateTime datetime)
-        {
-            TimeSpan daysLeft = datetime - DateTime.Now;
-            return daysLeft.Days;
-        }
-
         public static string GetDaysLeft(DateTime taskDate)
         {
-            TimeSpan daysLeft = taskDate - DateTime.Now;
-            string result = "";
+            TimeSpan timeLeft = GetTimeLeftNow(taskDate);
 
-            if (daysLeft.Days == 0 && daysLeft.TotalMicroseconds > 0)
+            if(isOverdue(taskDate)) return "Overdue.";
+            else if (timeLeft.Days == 0)
             {
-                if (daysLeft.Hours >= 1) result = daysLeft.Hours.ToString() + " H left.";
-                else if (daysLeft.Minutes >= 1) result = daysLeft.Minutes.ToString() + " Min left.";
-                else if (daysLeft.Seconds >= 0) result = daysLeft.Seconds.ToString() + " Sec left.";
+                if (timeLeft.Hours >= 1) return timeLeft.Hours + " H left.";
+                else if (timeLeft.Minutes >= 1) return timeLeft.Minutes + " Min left.";
+                else return timeLeft.Seconds + " Sec left.";
             }
-            else if (daysLeft.Days > 0) result = daysLeft.Days.ToString() + " Days left.";
-            else result = "Overdue.";
-
-            return result;
+            else return timeLeft.Days + " Days left.";
         }
 
         public static TimeSpan GetTimeLeftNow(DateTime taskDate)
@@ -43,11 +28,9 @@
             return daysLeft;
         }
 
-        public static bool GetOverdue(DateTime taskDate)
+        public static bool isOverdue(DateTime taskDate)
         {
-            TimeSpan daysLeft = taskDate - DateTime.Now;
-
-            if (daysLeft.TotalMicroseconds < 0) return true;
+            if (GetTimeLeftNow(taskDate).TotalSeconds < 0) return true;
             else return false;
         }
     }

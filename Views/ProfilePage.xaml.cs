@@ -77,7 +77,7 @@ public partial class ProfilePage : ContentPage
 
         List<Task> currTasks = new List<Task>();
         Task currTask = null;
-        DateTime now = Date.GetDate();
+        DateTime now = DateTime.Now;
 
         if(App.tasks.Count != 0)
         {

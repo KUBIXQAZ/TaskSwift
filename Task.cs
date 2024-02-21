@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
 using Newtonsoft.Json;
-using System.Net.WebSockets;
 using TaskSwift.Models;
 
 namespace TaskSwift.Views
@@ -239,7 +238,7 @@ namespace TaskSwift.Views
             if (date == DateTime.MinValue) App.stats.tasksDone++;
             else
             {
-                if (Date.GetOverdue(date.Date)) App.stats.tasksDoneOverdue++;
+                if (Date.isOverdue(date.Date)) App.stats.tasksDoneOverdue++;
                 else App.stats.tasksDone++;
             }
             App.stats.tasksPending = App.tasks.Count;
