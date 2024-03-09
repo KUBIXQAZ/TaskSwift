@@ -183,22 +183,23 @@ public partial class MainPage : ContentPage
         {
             TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
 
-            if (timeLeft.TotalSeconds > 0) return 0;
-            else if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return 1;
-            else return 2;
+            if (timeLeft.TotalSeconds > 0) return 0;//time left
+            else if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return 1;//overdue
+            else return 2;//no deadline
         })
             .GroupBy(task =>
             {
                 TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
 
                 if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);
+                else if (timeLeft.Days == 0 && task.date.Date.TimeOfDay == TimeSpan.Zero) return DateTime.MinValue.AddDays(2);
                 else return task.date.Date;
             });
-
+        
         foreach (var taskGroup in groupedTasks)
         {
             DateTime groupDate = taskGroup.Key;
-
+            Console.WriteLine("abc. "+taskGroup.Key);
             Label sectionTitle = new Label
             {
                 TextColor = Color.FromHex("#C0C0C0"),
@@ -209,7 +210,8 @@ public partial class MainPage : ContentPage
             if (groupDate != DateTime.MinValue)
             {
                 string title = null;
-                var timeLeft = Date.GetTimeLeft(groupDate, time);
+
+                var timeLeft = Date.GetTimeLeft(taskGroup.FirstOrDefault().date, time);
 
                 if (timeLeft.TotalSeconds < 0) title = "Overdue.";
                 else if (timeLeft.Days == 0) title = "Today.";
@@ -225,7 +227,8 @@ public partial class MainPage : ContentPage
 
             foreach (var task in taskGroup)
             {
-                tasksContainer.Add(TaskModel.DisplayTasks(task));
+                if (task.date.TimeOfDay == TimeSpan.Zero) Console.WriteLine(task.title);
+                    tasksContainer.Add(TaskModel.DisplayTasks(task));
             }
         }
     }

@@ -148,21 +148,14 @@ namespace TaskSwift.Views
                 BackgroundColor = bgColor,
                 CornerRadius = 15,
                 BorderColor = task.flag == null ? Colors.Transparent : task.flag.Color.WithAlpha(20).WithSaturation(20),
-                Margin = new Thickness(8, 3, 8, 0),
+                Margin = new Thickness(8, 6, 8, 0),
                 HeightRequest = 50,
                 Padding = 0
             };
 
             Grid grid = new Grid
             {
-                Padding = new Thickness(5, 0, 5, 0)
-            };
-            grid.AddColumnDefinition(new ColumnDefinition { Width = 50 });
-            grid.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
-
-            RadioButton radioButton = new RadioButton
-            {
-                IsEnabled = false,
+                Padding = new Thickness(10, 0, 5, 0)
             };
 
             if (task.title.Length > 29) task.title = task.title.Substring(0, 29) + "...";
@@ -175,8 +168,7 @@ namespace TaskSwift.Views
                 FontSize = 20
             };
 
-            grid.Add(radioButton, 0);
-            grid.Add(titleLabel, 1);
+            grid.Add(titleLabel);
 
             frame.Content = grid;
 
