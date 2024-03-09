@@ -191,15 +191,15 @@ public partial class MainPage : ContentPage
             {
                 TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
 
-                if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);
-                else if (timeLeft.Days == 0 && task.date.Date.TimeOfDay == TimeSpan.Zero) return DateTime.MinValue.AddDays(2);
-                else return task.date.Date;
+                if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);//overdue
+                else if (timeLeft.Days == 0 && task.date.Date.TimeOfDay == TimeSpan.Zero) return DateTime.MinValue.AddDays(2);//today
+                else return task.date.Date;//rest
             });
         
         foreach (var taskGroup in groupedTasks)
         {
             DateTime groupDate = taskGroup.Key;
-            Console.WriteLine("abc. "+taskGroup.Key);
+
             Label sectionTitle = new Label
             {
                 TextColor = Color.FromHex("#C0C0C0"),
@@ -227,8 +227,7 @@ public partial class MainPage : ContentPage
 
             foreach (var task in taskGroup)
             {
-                if (task.date.TimeOfDay == TimeSpan.Zero) Console.WriteLine(task.title);
-                    tasksContainer.Add(TaskModel.DisplayTasks(task));
+                tasksContainer.Add(TaskModel.DisplayTasks(task));
             }
         }
     }

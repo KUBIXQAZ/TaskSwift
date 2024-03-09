@@ -25,7 +25,6 @@ public partial class EditTaskPopup : Popup
             TaskDate.Date = task.date;
             TaskTime.Time = task.date.TimeOfDay;
         }
-        
 
         DisplayFlags();
     }
