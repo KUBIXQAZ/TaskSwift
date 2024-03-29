@@ -248,8 +248,6 @@ namespace TaskSwift.Views
             {
                 mainPage.displayTasks();
             }
-
-            MainPage.DisplayWhenNoTasks();
         }
 
         public static async void ViewTask(object sender, EventArgs e, TaskModel task)
