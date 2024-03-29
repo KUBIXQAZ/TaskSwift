@@ -18,7 +18,6 @@ public partial class MainPage : ContentPage
     private void ContentPage_Appearing(object sender, EventArgs e)
     {
         displayTasks();
-        DisplayWhenNoTasks();
         DisplayFlags();
     }
 
@@ -112,54 +111,51 @@ public partial class MainPage : ContentPage
 
     public static void DisplayWhenNoTasks()
     {
-        if (App.tasks.Count == 0)
+        var stack = new StackLayout
         {
-            var stack = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand
-            };
+            VerticalOptions = LayoutOptions.CenterAndExpand,
+            HorizontalOptions = LayoutOptions.CenterAndExpand
+        };
 
-            var gradient = new LinearGradientBrush
-            {
-                GradientStops =
+        var gradient = new LinearGradientBrush
+        {
+            GradientStops =
                 {
                     new GradientStop(Color.FromHex("#66B4FF"), 0),
                     new GradientStop(Color.FromHex("#428bff"), 0.5f),
                     new GradientStop(Color.FromHex("#66B4FF"), 1),
                 }
-            };
+        };
 
-            var label = new Label
-            {
-                Text = "You have nothing planned yet.",
-                FontSize = 16,
-                TextColor = Color.FromHex("#66B4FF")
-            };
+        var label = new Label
+        {
+            Text = "You have nothing planned yet.",
+            FontSize = 16,
+            TextColor = Color.FromHex("#66B4FF")
+        };
 
-            var button = new Button
-            {
-                Text = "Add task",
-                Background = gradient,
-                TextColor = Color.FromHex("#121212"),
-                FontSize = 16,
-                FontAttributes = FontAttributes.Bold,
-                WidthRequest = 120,
-                HeightRequest = 40,
-                Padding = 0,
-                Margin = 4
-            };
+        var button = new Button
+        {
+            Text = "Add task",
+            Background = gradient,
+            TextColor = Color.FromHex("#121212"),
+            FontSize = 16,
+            FontAttributes = FontAttributes.Bold,
+            WidthRequest = 120,
+            HeightRequest = 40,
+            Padding = 0,
+            Margin = 4
+        };
 
-            button.Clicked += (sender, e) =>
-            {
-                Shell.Current.GoToAsync("//AddTaskPage");
-            };
+        button.Clicked += (sender, e) =>
+        {
+            Shell.Current.GoToAsync("//AddTaskPage");
+        };
 
-            stack.Children.Add(label);
-            stack.Children.Add(button);
+        stack.Children.Add(label);
+        stack.Children.Add(button);
 
-            tasksContainer.Children.Add(stack);
-        }
+        tasksContainer.Children.Add(stack);
     }
 
     public void displayTasks()
@@ -177,58 +173,65 @@ public partial class MainPage : ContentPage
         }
         else tasks = App.tasks;
 
-        DateTime time = DateTime.Now;
-
-        var groupedTasks = tasks.OrderBy(task =>
+        if(tasks.Count > 0)
         {
-            TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
+            DateTime time = DateTime.Now;
 
-            if (timeLeft.TotalSeconds > 0) return 0;//time left
-            else if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return 1;//overdue
-            else return 2;//no deadline
-        })
-            .GroupBy(task =>
+            var groupedTasks = tasks.OrderBy(task =>
             {
                 TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
 
-                if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);//overdue
-                else if (timeLeft.Days == 0 && task.date.Date.TimeOfDay == TimeSpan.Zero) return DateTime.MinValue.AddDays(2);//today
-                else return task.date.Date;//rest
-            });
-        
-        foreach (var taskGroup in groupedTasks)
+                if (timeLeft.TotalSeconds > 0) return 0;//time left
+                else if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return 1;//overdue
+                else return 2;//no deadline
+            })
+                .GroupBy(task =>
+                {
+                    TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
+
+                    if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);//overdue
+                    else if (timeLeft.Days == 0 && task.date.Date.TimeOfDay == TimeSpan.Zero) return DateTime.MinValue.AddDays(2);//today
+                    else return task.date.Date;//rest
+                });
+
+            foreach (var taskGroup in groupedTasks)
+            {
+                DateTime groupDate = taskGroup.Key;
+
+                Label sectionTitle = new Label
+                {
+                    TextColor = Color.FromHex("#C0C0C0"),
+                    FontSize = 20,
+                    Margin = new Thickness(5, 10, 0, 5)
+                };
+
+                if (groupDate != DateTime.MinValue)
+                {
+                    string title = null;
+
+                    var timeLeft = Date.GetTimeLeft(taskGroup.FirstOrDefault().date, time);
+
+                    if (timeLeft.TotalSeconds < 0) title = "Overdue.";
+                    else if (timeLeft.Days == 0) title = "Today.";
+                    else title = $"{timeLeft.Days} Days left.";
+
+                    sectionTitle.Text = title;
+                }
+                else
+                {
+                    sectionTitle.Text = "No deadline.";
+                }
+
+                tasksContainer.Add(sectionTitle);
+
+                foreach (var task in taskGroup)
+                {
+                    tasksContainer.Add(TaskModel.DisplayTasks(task));
+                }
+            }
+        } else
         {
-            DateTime groupDate = taskGroup.Key;
-
-            Label sectionTitle = new Label
-            {
-                TextColor = Color.FromHex("#C0C0C0"),
-                FontSize = 20,
-                Margin = new Thickness(5, 10, 0, 5)
-            };
-
-            if (groupDate != DateTime.MinValue)
-            {
-                string title = null;
-
-                var timeLeft = Date.GetTimeLeft(taskGroup.FirstOrDefault().date, time);
-
-                if (timeLeft.TotalSeconds < 0) title = "Overdue.";
-                else if (timeLeft.Days == 0) title = "Today.";
-                else title = $"{timeLeft.Days} Days left.";
-
-                sectionTitle.Text = title;
-            } else
-            {
-                sectionTitle.Text = "No deadline.";
-            }
-
-            tasksContainer.Add(sectionTitle);
-
-            foreach (var task in taskGroup)
-            {
-                tasksContainer.Add(TaskModel.DisplayTasks(task));
-            }
+            DisplayWhenNoTasks();
         }
     }
 }
