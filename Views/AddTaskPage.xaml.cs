@@ -136,7 +136,7 @@ public partial class AddTaskPage : ContentPage
     {
         TaskModel task;
 
-        task = TaskModel.createTask(title, withDeadline ? date : DateTime.MinValue, withDeadline, flag);
+        task = TaskModel.createTask(title, date, withDeadline, flag);
 
         App.tasks.Add(task);
         TaskModel.SaveTask();
@@ -156,7 +156,7 @@ public partial class AddTaskPage : ContentPage
 
         bool withDeadline = DeadlineCheckbox.IsChecked;
 
-        GenerateTask(withDeadline, title, withDeadline ? combinedDateTime : DateTime.MinValue, selectedFlag);
+        GenerateTask(withDeadline, title, withDeadline ? combinedDateTime : DateTime.MaxValue, selectedFlag);
 
         TitleEntry.Text = string.Empty;
 

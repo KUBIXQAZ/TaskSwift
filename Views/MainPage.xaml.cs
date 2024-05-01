@@ -177,21 +177,15 @@ public partial class MainPage : ContentPage
         {
             DateTime time = DateTime.Now;
 
-            var groupedTasks = tasks.OrderBy(task =>
-            {
-                TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
-
-                if (timeLeft.TotalSeconds > 0) return 0;//time left
-                else if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return 1;//overdue
-                else return 2;//no deadline
-            })
+            var groupedTasks = tasks.OrderBy(task => task.date)
                 .GroupBy(task =>
                 {
                     TimeSpan timeLeft = Date.GetTimeLeft(task.date, time);
 
                     if (timeLeft.TotalSeconds < 0 && task.date != DateTime.MinValue) return DateTime.MinValue.AddDays(1);//overdue
                     else if (timeLeft.Days == 0 && task.date.Date.TimeOfDay == TimeSpan.Zero) return DateTime.MinValue.AddDays(2);//today
-                    else return task.date.Date;//rest
+                    else if (task.date != DateTime.MaxValue) return task.date.Date;//rest with deadline
+                    else return DateTime.MaxValue;//no deadline
                 });
 
             foreach (var taskGroup in groupedTasks)
@@ -205,7 +199,7 @@ public partial class MainPage : ContentPage
                     Margin = new Thickness(5, 10, 0, 5)
                 };
 
-                if (groupDate != DateTime.MinValue)
+                if (groupDate != DateTime.MaxValue)
                 {
                     string title = null;
 
